@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>BOUI Music Cover</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body, html {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      font-family: sans-serif;
+    }
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .enter-button {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: linear-gradient(to right, #ff512f, #dd2476);
+      padding: 14px 30px;
+      border-radius: 40px;
+      border: none;
+      font-size: 18px;
+      font-weight: bold;
+      color: white;
+      cursor: pointer;
+      z-index: 10;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .enter-button:hover {
+      transform: translateX(-50%) scale(1.05);
+    }
+  </style>
+</head>
+
+<body>
+
+  <img src="https://raw.githubusercontent.com/Rajatalluri91/World-of-God-Songs/main/Main%20Cover.jpg" alt="Main Cover">
+
+  <button class="enter-button"
+    onclick="window.location.href='https://rajatalluri91.github.io/World-of-God-Songs/Index.html'">
+    ENTER
+  </button>
+
+</body>
+</html>
