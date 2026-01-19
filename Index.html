@@ -687,9 +687,12 @@ function cacheThisSong(songUrl, lyricsUrl) {
 </script>
 <script>
 if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("/World-of-God-Songs/sw.js", { scope: "/World-of-God-Songs/" })
-    .then(() => console.log("SW Registered"))
-    .catch(err => console.log("SW Failed", err));
+  navigator.serviceWorker.register(
+    "/World-of-God-Songs/sw.js",
+    { scope: "/World-of-God-Songs/" }
+  )
+  .then(() => console.log("Service Worker సక్సెస్‌గా రిజిస్టర్ అయింది"))
+  .catch(err => console.log("Service Worker లో error:", err));
 }
 </script>
 
