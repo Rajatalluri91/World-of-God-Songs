@@ -1,0 +1,691 @@
+
+    <!DOCTYPE html>
+
+<html dir="ltr" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css?family=Roboto&amp;display=swap" rel="stylesheet"/>
+<script crossorigin="anonymous" src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
+<title>MP3 Player</title>
+<link href="style.css" media="all" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Anek+Telugu&amp;display=swap" rel="stylesheet"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/> <link href="https://fonts.googleapis.com/css2?family=Anek+Telugu:wght@421&amp;family=Mallanna&amp;family=Mandali&amp;display=swap" rel="stylesheet"/>
+
+<link rel="manifest" href="manifest.json">
+
+</head>
+<style>
+      
+  body{
+  
+  align-items: center;
+  justify-content: center;
+  
+  background-image: linear-gradient(to bottom left, #041f31, black);
+  user-select: none; /* supported by Chrome and Opera */
+   -webkit-user-select: none; /* Safari */
+   -khtml-user-select: none; /* Konqueror HTML */
+   -moz-user-select: none; /* Firefox */
+   -ms-user-select: none; /* Internet Explorer/Edge */
+   height: 100%; /* Ensure enough content for scrolling */
+   
+   background-size: 100% 100%;
+   
+   
+}
+
+
+
+#myProgress {
+  width: 90%;
+   background-color: #d9d9f2; 
+  cursor: pointer;
+  border-radius: 10px;
+}
+
+
+
+#myBar {
+  width: 0%;
+  height: 5px;
+  background-color: #ffe98a;
+  border-radius: 10px;
+}
+
+.logo {
+  fill: red;
+}
+
+.btn-action{
+  cursor: pointer;
+  padding-top:0;
+  width: 70px;
+  
+  }
+
+.btn-ctn, .infos-ctn{
+  display: flex;
+  align-items:center;
+  justify-content:center;
+  -webkit-tap-highlight-color:transparent;
+  margin-top:0;
+  
+}
+.infos-ctn{
+padding-top:10px;
+font-family: 'Anek Telugu', sans-serif;
+}
+
+.btn-ctn > div {
+ padding-top: 10px;
+ padding-left: 10px;
+ padding-right: 0px;
+ left: 0;
+ margin-top:5px;
+ margin-bottom:0px;
+ 
+}
+
+.infos-ctn > div {
+ margin-bottom: 8px;
+ color: white;
+}
+
+.first-btn{
+  margin-left: 3px;
+  
+}
+
+.duration{
+  margin-left: 10px;
+}
+
+.title{
+  margin-left: 10px;
+  width: 180px;
+  text-align: center;
+  justify-content: center;
+  
+}
+
+
+
+
+
+.player-ctn{
+  
+  width:100%;
+  
+  color:#ffe98a;
+  margin-bottom:0;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  position:fixed;
+  bottom:0px;
+ 
+  left: 0;
+ height: 100px;
+ background-image: linear-gradient(to bottom left, #041f31, black);
+ 
+}
+
+
+
+
+
+
+.playlist-track-ctn {
+  display: flex;
+  background: rgba(0, 0, 0, 0.3);
+  margin-top: 5px;         /* ⬅️ Reduced gap between items */
+  border-radius: 5px;
+  cursor: pointer;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 10px;        /* ⬅️ Reduced vertical spacing inside item */
+  column-gap: 10px;
+ 
+}
+
+
+   
+.playlist-track-ctn:last-child{
+  /*border: 1px solid #ffe98a; */
+  
+}
+
+
+.playlist-info-track{
+  width: 80%;
+}
+
+
+.playlist-info-track,.playlist-duration{
+  padding-top: 8px;
+  padding-bottom:0px;
+  color: white;
+  font-size:18px;
+  pointer-events: none;
+  margin-right:10px;
+}
+
+
+.active-track{
+  background:black;
+  color: white !important;
+  font-weight:bold;
+  -webkit-tap-highlight-color:#141727cf;
+  
+}
+
+
+.active-track > .playlist-info-track,.active-track >.playlist-duration,.active-track > .playlist-btn-play{
+  color: #ffe98a !important;
+}
+
+
+.playlist-btn-play{
+  pointer-events: none;
+  padding-top: 8px;
+  padding-bottom:0;
+  padding-right:10px;
+}
+.fas{
+  color:#ffe98a;
+  font-size: 16px;
+  padding-top: 0px;
+
+  
+  
+}  
+.playlist-ctn{
+	font-size:15px;
+	color:#ffe98a;
+	font-family: 'Mandali', sans-serif;
+	margin-bottom:100px;
+	margin-top: 10px;
+	height:100%;
+	
+
+   }   
+  
+     .zoom-out {
+  width: 95%;
+  height: 200px; /* fixed height instead of aspect-ratio */
+  background-image: url('https://github.com/Rajatalluri91/World-of-God-Songs/blob/main/WOG%20COVER.jpg?raw=true');
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  border-radius: 25px;
+  margin: auto;
+  
+}
+
+    .zoom-out.scroll {
+      transform: scale(0.5);
+      opacity: 0.1;
+    }
+	
+	.playlist-track-ctn i.fa-scroll {
+  color: #ffe98a;
+  padding-top: 10px;
+}
+
+.lyrics-box {
+        display: none;
+        background: rgba(0, 0, 0, 0.5);
+        padding: 10px;
+        border-radius: 8px;
+        white-space: pre-line;
+        font-family: 'Mandali', sans-serif;
+        font-size: 20px;
+        margin: 5px 10px 10px 2px;
+        color:#ffe98a;
+        width:88%;
+        padding-left:30px;
+      }
+
+.custom-download-icon {
+  color: #ffe98a !important;
+  font-size: 16px;
+}
+
+
+
+  </style>
+<body>
+
+
+
+<div class="zoom-out"></div>
+<script>
+    window.addEventListener('scroll', function() {
+      var scrollPosition = window.scrollY;
+      var zoomOutElement = document.querySelector('.zoom-out');
+
+      if (scrollPosition > 150) { // Adjust the scroll position where the effect starts
+        zoomOutElement.classList.add('scroll');
+      } else {
+        zoomOutElement.classList.remove('scroll');
+      }
+    });
+  </script>
+<audio id="myAudio" ontimeupdate="onTimeUpdate()">
+<!-- <source src="audio.ogg" type="audio/ogg"> -->
+<source id="source-audio" src="" type="audio/mpeg"/>
+  Your browser does not support the audio element.
+</audio>
+<div class="playlist-ctn"></div>
+<div class="player-ctn">
+<div class="infos-ctn">
+<div class="timer">00:00</div>
+<div class="title"></div>
+<div class="duration">00:00</div>
+<div class="Artist"></div>
+</div>
+<div id="myProgress">
+<div id="myBar"></div>
+</div>
+<div class="btn-ctn">
+<div class="btn-action first-btn" onclick="previous()">
+<div id="btn-faws-back">
+<i class="fas fa-step-backward"></i>
+</div>
+</div>
+<div class="btn-action" onclick="toggleAudio()">
+<div id="btn-faws-play-pause">
+<i class="fas fa-play" id="icon-play"></i>
+<i class="fas fa-pause" id="icon-pause" style="display: none"></i>
+</div>
+</div>
+<div class="btn-action" onclick="next()">
+<div id="btn-faws-next">
+<i class="fas fa-step-forward"></i>
+</div>
+</div>
+<div class="btn-mute" id="toggleMute" onclick="toggleMute()">
+<div id="btn-faws-volume">
+<i class="fas fa-volume-up" id="icon-vol-up"></i>
+<i class="fas fa-volume-mute" id="icon-vol-mute" style="display: none"></i>
+</div>
+</div>
+</div>
+</div>
+<script>
+ 
+function createTrackItem(index, name, duration) {
+  const trackItem = document.createElement('div');
+  trackItem.className = 'playlist-track-ctn';
+  trackItem.id = 'ptc-' + index;
+  trackItem.dataset.index = index;
+
+  // ▶️ Play Button
+  const playBtn = document.createElement('div');
+  playBtn.className = 'playlist-btn-play';
+  playBtn.innerHTML = `<i class="fas fa-play" id="p-img-${index}"></i>`;
+
+  // 🎵 Song Info
+  const info = document.createElement('div');
+  info.className = 'playlist-info-track';
+  info.textContent = name;
+
+  // ⏱ Duration
+  const dur = document.createElement('div');
+  dur.className = 'playlist-duration';
+  dur.textContent = duration;
+
+  // 📖 Lyrics Icon
+  const lyricsIcon = document.createElement('div');
+  lyricsIcon.innerHTML = `<i class="fas fa-book-open"></i>`;
+  lyricsIcon.style.cursor = 'pointer';
+  lyricsIcon.onclick = function () {
+  const lBox = document.getElementById('lyrics-' + index);
+  const isVisible = lBox.style.display === 'block';
+
+  // మొదట అన్ని lyrics-boxల్ని hide చేయండి
+  document.querySelectorAll('.lyrics-box').forEach(box => {
+    box.style.display = 'none';
+  });
+
+  // ఇప్పుడు మాత్రమే toggle చేయండి
+  lBox.style.display = isVisible ? 'none' : 'block';
+};
+
+
+  // ⬇️ Download Icon
+  const downloadIcon = document.createElement('div');
+  downloadIcon.style.cursor = 'pointer';
+  downloadIcon.innerHTML = `
+  <a href="${listAudio[index].file}" download title="Download Song">
+    <i class="fas fa-download" style="color: #ffe98a; font-size: 16px;"></i>
+  </a>
+`;
+
+
+  // ✅ Add all to track
+  trackItem.appendChild(playBtn);
+  trackItem.appendChild(info);
+  trackItem.appendChild(dur);
+  trackItem.appendChild(lyricsIcon);
+  trackItem.appendChild(downloadIcon);
+
+  // 🧾 Lyrics Box
+  const lyricsDiv = document.createElement('div');
+  lyricsDiv.className = 'lyrics-box';
+  lyricsDiv.id = 'lyrics-' + index;
+  lyricsDiv.style.display = 'none';
+
+  const lyricsText = document.createElement('div');
+  lyricsText.textContent = 'Lyrics loading...';
+  lyricsDiv.appendChild(lyricsText);
+
+  // 📜 Add track and lyrics to playlist
+  document.querySelector('.playlist-ctn').appendChild(trackItem);
+  document.querySelector('.playlist-ctn').appendChild(lyricsDiv);
+
+  // 🎤 Load lyrics
+  if (listAudio[index].lyricsUrl) {
+    fetch(listAudio[index].lyricsUrl)
+      .then(res => res.text())
+      .then(text => {
+        lyricsText.textContent = text;
+      })
+      .catch(err => {
+        lyricsText.textContent = "Lyrics unavailable.";
+      });
+  } else {
+    lyricsText.textContent = listAudio[index].lyrics || "Lyrics unavailable...";
+  }
+}
+
+
+
+
+  
+
+var listAudio = [
+   {
+      name:"సృష్టిలో విలువైనది స్నేహమే",
+     file:"https://raw.githubusercontent.com/Rajatalluri91/World-of-God-Songs/main/Devuni%20Sneham.mp3",
+      duration:"04:18",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/69526796a0a48e6ab3c3fa74ff9ff5ae/raw/535674db84a6809da89b8b3c3ade05a1e5772588/1.%2520Srustilo%2520Viluvainadi "
+      
+    },
+    {
+      name:"తుదివరకు నిలుచుటయే",
+     file:"https://raw.githubusercontent.com/Rajatalluri91/World-of-God-Songs/main/Thudivaraku.mp3",
+      duration:"05:13",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/69526796a0a48e6ab3c3fa74ff9ff5ae/raw/535674db84a6809da89b8b3c3ade05a1e5772588/2.%2520Thudhivaraku "
+      
+    },
+    {
+      name:"పండుగ చేద్దామా",
+      file:"https://raw.githubusercontent.com/Rajatalluri91/World-of-God-Songs/main/Panduga.mp3",
+      duration:"06:00",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/69526796a0a48e6ab3c3fa74ff9ff5ae/raw/535674db84a6809da89b8b3c3ade05a1e5772588/3.%2520Panduga%2520Cheddama "
+    },
+    {
+      name:"నీకై నూతనమవుతున్నది ",
+      file:"https://raw.githubusercontent.com/Rajatalluri91/World-of-God-Songs/main/New%20Year%20Song.mp3",
+      duration:"05:09",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/69526796a0a48e6ab3c3fa74ff9ff5ae/raw/535674db84a6809da89b8b3c3ade05a1e5772588/4.%2520Neekai%2520Nuthana "
+    },
+	{
+      name:"ఆకాశంతో చెప్పనా",
+      file:"https://raw.githubusercontent.com/Rajatalluri91/World-of-God-Songs/main/Akashamtho.mp3",
+      duration:"04:11",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/69526796a0a48e6ab3c3fa74ff9ff5ae/raw/535674db84a6809da89b8b3c3ade05a1e5772588/5.%2520Akashamtho "
+    },
+    {
+      name:"తెలుసా ఇది తెలుసా",
+      file:"https://raw.githubusercontent.com/Rajatalluri91/World-of-God-Songs/main/Telusa.mp3",
+      duration:"04:21",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/69526796a0a48e6ab3c3fa74ff9ff5ae/raw/535674db84a6809da89b8b3c3ade05a1e5772588/6.%2520Telusa%2520Idhi%2520Telusa "
+    },
+    {
+      name:"పండుగ చేద్దామా Track",
+      file:"https://raw.githubusercontent.com/Rajatalluri91/World-of-God-Songs/main/Raja%27s%20Christmas%20Song%20%20Track.mp3",
+      duration:"06:00",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/69526796a0a48e6ab3c3fa74ff9ff5ae/raw/535674db84a6809da89b8b3c3ade05a1e5772588/3.%2520Panduga%2520Cheddama "
+    },
+    {
+      name:"New Year Song Track ",
+      file:"https://raw.githubusercontent.com/Rajatalluri91/World-of-God-Songs/main/New%20Year%20Track.mp3",
+      duration:"05:09",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/69526796a0a48e6ab3c3fa74ff9ff5ae/raw/535674db84a6809da89b8b3c3ade05a1e5772588/4.%2520Neekai%2520Nuthana "
+    },
+    {
+      name:"New Year Song Special ",
+      file:"https://raw.githubusercontent.com/Rajatalluri91/World-of-God-Songs/main/New%20Year%20Song%20Remix.mp3",
+      duration:"06:47",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/69526796a0a48e6ab3c3fa74ff9ff5ae/raw/535674db84a6809da89b8b3c3ade05a1e5772588/4.%2520Neekai%2520Nuthana "
+    }
+    ]
+    
+
+
+  for (var i = 0; i < listAudio.length; i++) {
+      createTrackItem(i,listAudio[i].name,listAudio[i].duration);
+  }
+  var indexAudio = 0;
+
+  function loadNewTrack(index){
+    var player = document.querySelector('#source-audio')
+    player.src = listAudio[index].file
+    document.querySelector('.title').innerHTML = listAudio[index].name
+    this.currentAudio = document.getElementById("myAudio");
+    this.currentAudio.load()
+    this.toggleAudio()
+    this.updateStylePlaylist(this.indexAudio,index)
+    this.indexAudio = index;
+  }
+
+  var playListItems = document.querySelectorAll(".playlist-track-ctn");
+
+  for (let i = 0; i < playListItems.length; i++){
+    playListItems[i].addEventListener("click", getClickedElement.bind(this));
+  }
+
+  function getClickedElement(event) {
+    for (let i = 0; i < playListItems.length; i++){
+      if(playListItems[i] == event.target){
+        var clickedIndex = event.target.getAttribute("data-index")
+        if (clickedIndex == this.indexAudio ) { // alert('Same audio');
+            this.toggleAudio()
+        }else{
+            loadNewTrack(clickedIndex);
+        }
+      }
+    }
+  }
+
+  document.querySelector('#source-audio').src = listAudio[indexAudio].file
+  document.querySelector('.title').innerHTML = listAudio[indexAudio].name
+
+
+  var currentAudio = document.getElementById("myAudio");
+
+  currentAudio.load()
+  
+  currentAudio.onloadedmetadata = function() {
+        document.getElementsByClassName('duration')[0].innerHTML = this.getMinutes(this.currentAudio.duration)
+  }.bind(this);
+
+  var interval1;
+
+  function toggleAudio() {
+
+    if (this.currentAudio.paused) {
+      document.querySelector('#icon-play').style.display = 'none';
+      document.querySelector('#icon-pause').style.display = 'block';
+      document.querySelector('#ptc-'+this.indexAudio).classList.add("active-track");
+      this.playToPause(this.indexAudio)
+      this.currentAudio.play();
+    }else{
+      document.querySelector('#icon-play').style.display = 'block';
+      document.querySelector('#icon-pause').style.display = 'none';
+      this.pauseToPlay(this.indexAudio)
+      this.currentAudio.pause();
+    }
+  }
+
+  function pauseAudio() {
+    this.currentAudio.pause();
+    clearInterval(interval1);
+  }
+
+  var timer = document.getElementsByClassName('timer')[0]
+
+  var barProgress = document.getElementById("myBar");
+
+
+  var width = 0;
+
+  function onTimeUpdate() {
+    var t = this.currentAudio.currentTime
+    timer.innerHTML = this.getMinutes(t);
+    this.setBarProgress();
+    if (this.currentAudio.ended) {
+      document.querySelector('#icon-play').style.display = 'block';
+      document.querySelector('#icon-pause').style.display = 'none';
+      this.pauseToPlay(this.indexAudio)
+      if (this.indexAudio < listAudio.length-1) {
+          var index = parseInt(this.indexAudio)+1
+          this.loadNewTrack(index)
+      }
+    }
+  }
+
+
+  function setBarProgress(){
+    var progress = (this.currentAudio.currentTime/this.currentAudio.duration)*100;
+    document.getElementById("myBar").style.width = progress + "%";
+  }
+
+
+  function getMinutes(t){
+    var min = parseInt(parseInt(t)/60);
+    var sec = parseInt(t%60);
+    if (sec < 10) {
+      sec = "0"+sec
+    }
+    if (min < 10) {
+      min = "0"+min
+    }
+    return min+":"+sec
+  }
+
+  var progressbar = document.querySelector('#myProgress')
+  progressbar.addEventListener("click", seek.bind(this));
+
+
+  function seek(event) {
+    var percent = event.offsetX / progressbar.offsetWidth;
+    this.currentAudio.currentTime = percent * this.currentAudio.duration;
+    barProgress.style.width = percent*100 + "%";
+  }
+
+  function forward(){
+    this.currentAudio.currentTime = this.currentAudio.currentTime + 5
+    this.setBarProgress();
+  }
+
+  function rewind(){
+    this.currentAudio.currentTime = this.currentAudio.currentTime - 5
+    this.setBarProgress();
+  }
+
+
+  function next(){
+    if (this.indexAudio <listAudio.length-1) {
+        var oldIndex = this.indexAudio
+        this.indexAudio++;
+        updateStylePlaylist(oldIndex,this.indexAudio)
+        this.loadNewTrack(this.indexAudio);
+    }
+  }
+
+  function previous(){
+    if (this.indexAudio>0) {
+        var oldIndex = this.indexAudio
+        this.indexAudio--;
+        updateStylePlaylist(oldIndex,this.indexAudio)
+        this.loadNewTrack(this.indexAudio);
+    }
+  }
+
+  function updateStylePlaylist(oldIndex,newIndex){
+    document.querySelector('#ptc-'+oldIndex).classList.remove("active-track");
+    this.pauseToPlay(oldIndex);
+    document.querySelector('#ptc-'+newIndex).classList.add("active-track");
+    this.playToPause(newIndex)
+  }
+
+  function playToPause(index){
+    var ele = document.querySelector('#p-img-'+index)
+    ele.classList.remove("fa-play");
+    ele.classList.add("fa-pause");
+  }
+
+  function pauseToPlay(index){
+    var ele = document.querySelector('#p-img-'+index)
+    ele.classList.remove("fa-pause");
+    ele.classList.add("fa-play");
+  }
+
+
+  function toggleMute(){
+    var btnMute = document.querySelector('#toggleMute');
+    var volUp = document.querySelector('#icon-vol-up');
+    var volMute = document.querySelector('#icon-vol-mute');
+    if (this.currentAudio.muted == false) {
+       this.currentAudio.muted = true
+       volUp.style.display = "none"
+       volMute.style.display = "block"
+    }else{
+      this.currentAudio.muted = false
+      volMute.style.display = "none"
+      volUp.style.display = "block"
+    }
+  }
+  
+  
+
+</script>
+<script src="app.js"></script>
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js')
+      .then(function() { console.log('SW registered'); });
+  }
+</script>
+
+<script>
+function cacheThisSong(songUrl, lyricsUrl) {
+  if (!('caches' in window)) {
+    alert("❌ Caching not supported in this browser.");
+    return;
+  }
+  caches.open('boui-v1').then(cache => {
+    cache.add(songUrl).then(() => {
+      if (lyricsUrl) {
+        cache.add(lyricsUrl).then(() => {
+          alert("✔ Cached song & lyrics for offline use!");
+        }).catch(() => alert("⚠️ Song cached, but lyrics failed."));
+      } else {
+        alert("✔ Cached song for offline use!");
+      }
+    }).catch(() => {
+      alert("❌ Failed to cache song.");
+    });
+  });
+}
+</script>
+
+
+</body>
+</html>
