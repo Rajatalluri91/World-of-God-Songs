@@ -4,10 +4,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>BOUI Music Cover</title>
-<link rel="manifest" href="manifest.json">
+
+  <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#000000">
-<link rel="apple-touch-icon" href="icons/icon-192.png">
-  
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+
   <style>
     * {
       margin: 0;
@@ -44,30 +45,27 @@
       z-index: 10;
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
     }
-
-    .enter-button:hover {
-      transform: translateX(-50%) scale(1.05);
-    }
   </style>
 </head>
 
 <body>
 
-  <img src="https://raw.githubusercontent.com/Rajatalluri91/World-of-God-Songs/main/Main%20Cover.jpg" alt="Main Cover">
+  <img src="Main-Cover.jpg" alt="Main Cover">
 
-  <button class="enter-button"
-    onclick="window.location.href='album.html'">
+  <button class="enter-button" onclick="location.href='album.html'">
     ENTER
   </button>
-<script>
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => {
-    navigator.serviceWorker
-      .register("sw.js")
-      .then(reg => console.log("SW registered", reg.scope))
-      .catch(err => console.log("SW failed", err));
-  });
-}
-</script>
+
+  <script>
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker
+          .register("./sw.js")
+          .then(reg => console.log("SW registered", reg.scope))
+          .catch(err => console.log("SW failed", err));
+      });
+    }
+  </script>
+
 </body>
 </html>
