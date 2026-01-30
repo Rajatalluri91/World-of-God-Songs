@@ -38,3 +38,10 @@ self.addEventListener("fetch", event => {
     caches.match(event.request).then(resp => resp || fetch(event.request))
   );
 });
+const lyricsUrl = "RAW_URL_HERE?v=" + Date.now();
+
+fetch(lyricsUrl, { cache: "no-store" })
+  .then(res => res.text())
+  .then(text => {
+    lyricsDiv.innerText = text;
+  });
