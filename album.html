@@ -14,7 +14,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Anek+Telugu&amp;display=swap" rel="stylesheet"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/> <link href="https://fonts.googleapis.com/css2?family=Anek+Telugu:wght@421&amp;family=Mallanna&amp;family=Mandali&amp;display=swap" rel="stylesheet"/>
 
-<link rel="manifest" href="/World-of-God-Songs/manifest.json">
+<link rel="manifest" href="manifest.json">
+
 </head>
 <style>
       
@@ -60,10 +61,12 @@
 
 .btn-action{
   cursor: pointer;
-  padding-top:0;
-  width: 70px;
-  
-  }
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
 .btn-ctn, .infos-ctn{
   display: flex;
@@ -78,14 +81,12 @@ padding-top:10px;
 font-family: 'Anek Telugu', sans-serif;
 }
 
-.btn-ctn > div {
- padding-top: 10px;
- padding-left: 10px;
- padding-right: 0px;
- left: 0;
- margin-top:5px;
- margin-bottom:0px;
- 
+.btn-ctn{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 28px;              /* equal spacing */
+  margin-top: 1px;
 }
 
 .infos-ctn > div {
@@ -129,6 +130,7 @@ font-family: 'Anek Telugu', sans-serif;
   left: 0;
  height: 100px;
  background-image: linear-gradient(to bottom left, #041f31, black);
+ 
  
 }
 
@@ -195,12 +197,10 @@ font-family: 'Anek Telugu', sans-serif;
 }
 .fas{
   color:#ffe98a;
-  font-size: 16px;
-  padding-top: 0px;
-
+  font-size: 18px;
+  line-height: 1;
+}
   
-  
-}  
 .playlist-ctn{
 	font-size:15px;
 	color:#ffe98a;
@@ -253,8 +253,19 @@ font-family: 'Anek Telugu', sans-serif;
   font-size: 16px;
 }
 
+#btn-speed i {
+  color: #ffe98a;
+  font-size: 16px;
+}
 
-
+.speed-label{
+  font-size: 13px;
+  color: #ffe98a;
+}
+.player-ctn{
+  width:100%;
+  overflow: visible;   /* 🔥 important */
+}
   </style>
 <body>
 
@@ -306,14 +317,22 @@ font-family: 'Anek Telugu', sans-serif;
 <i class="fas fa-step-forward"></i>
 </div>
 </div>
-<div class="btn-mute" id="toggleMute" onclick="toggleMute()">
+<div class="btn-action" id="toggleMute" onclick="toggleMute()">
 <div id="btn-faws-volume">
 <i class="fas fa-volume-up" id="icon-vol-up"></i>
 <i class="fas fa-volume-mute" id="icon-vol-mute" style="display: none"></i>
 </div>
+
+</div>
+<div class="btn-action" onclick="changeSpeed()" style="gap:4px;">
+  <i class="fas fa-tachometer-alt"></i>
+  <span class="speed-label" id="speedLabel">1x</span>
 </div>
 </div>
 </div>
+
+</div>
+
 <script>
  
 function createTrackItem(index, name, duration) {
@@ -411,14 +430,14 @@ var listAudio = [
       name:"సృష్టిలో విలువైనది స్నేహమే",
      file:"https://raw.githubusercontent.com/Rajatalluri91/World-of-God-Songs/main/Devuni%20Sneham.mp3",
       duration:"04:18",
-      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/69526796a0a48e6ab3c3fa74ff9ff5ae/raw/4616fa4c69adb08551002b2be72c9dab3dc08d44/1.%2520Srustilo%2520Viluvainadi "
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/69526796a0a48e6ab3c3fa74ff9ff5ae/raw/535674db84a6809da89b8b3c3ade05a1e5772588/1.%2520Srustilo%2520Viluvainadi "
       
     },
     {
       name:"తుదివరకు నిలుచుటయే",
      file:"https://raw.githubusercontent.com/Rajatalluri91/World-of-God-Songs/main/Thudivaraku.mp3",
       duration:"05:13",
-      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/69526796a0a48e6ab3c3fa74ff9ff5ae/raw/4616fa4c69adb08551002b2be72c9dab3dc08d44/2.%2520Thudhivaraku "
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/69526796a0a48e6ab3c3fa74ff9ff5ae/raw/535674db84a6809da89b8b3c3ade05a1e5772588/2.%2520Thudhivaraku "
       
     },
     {
@@ -683,17 +702,17 @@ function cacheThisSong(songUrl, lyricsUrl) {
     });
   });
 }
-</script>
-<script>
-if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register(
-    "/World-of-God-Songs/sw.js",
-    { scope: "/World-of-God-Songs/" }
-  )
-  .then(() => console.log("Service Worker సక్సెస్‌గా రిజిస్టర్ అయింది"))
-  .catch(err => console.log("Service Worker లో error:", err));
+
+var speeds = [0.5, 1, 1.25, 1.5, 2];
+var speedIndex = 1; // default 1x
+
+function changeSpeed() {
+  speedIndex = (speedIndex + 1) % speeds.length;
+  currentAudio.playbackRate = speeds[speedIndex];
+  document.getElementById("speedLabel").innerText = speeds[speedIndex] + "x";
 }
 </script>
+
 
 </body>
 </html>
