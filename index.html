@@ -29,22 +29,82 @@
       object-fit: cover;
     }
 
-    .enter-button {
-      position: absolute;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: linear-gradient(to right, #ff512f, #dd2476);
-      padding: 14px 30px;
-      border-radius: 40px;
-      border: none;
-      font-size: 18px;
-      font-weight: bold;
-      color: white;
-      cursor: pointer;
-      z-index: 10;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-    }
+   .enter-button {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 14px 32px;
+  border-radius: 40px;
+  border: none;
+
+  font-size: 18px;
+  font-weight: bold;
+  letter-spacing: 1px;
+
+  color: #3b2f00;
+  cursor: pointer;
+  z-index: 10;
+
+  background: linear-gradient(
+    120deg,
+    #c9a200,
+    #ffd700,
+    #ffec8b,
+    #ffd700,
+    #c9a200
+  );
+  background-size: 300% 300%;
+
+  box-shadow:
+    0 4px 15px rgba(255, 215, 0, 0.6),
+    inset 0 1px 2px rgba(255, 255, 255, 0.6);
+
+  animation: goldShine 3s infinite linear;
+}
+
+@keyframes goldShine {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 100% 50%;
+  }
+}
+
+.enter-button:active {
+  transform: translateX(-50%) scale(0.95);
+}
+.enter-button:active {
+  transform: translateX(-50%) scale(0.96);
+}
+
+.enter-button:hover {
+  background: linear-gradient(
+    135deg,
+    #FFE066,
+    #FFC400,
+    #D4AF37
+  );
+}
+/* Remove blue tap highlight (Android / Chrome) */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Remove focus outline */
+.enter-button:focus,
+.enter-button:active {
+  outline: none;
+  box-shadow:
+    0 4px 15px rgba(255, 215, 0, 0.6),
+    inset 0 1px 2px rgba(255, 255, 255, 0.6);
+}
+
+/* Optional: smooth press effect */
+.enter-button:active {
+  transform: translateX(-50%) scale(0.95);
+}
   </style>
 </head>
 
