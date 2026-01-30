@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>BOUI Music Library</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> <link href="https://fonts.googleapis.com/css2?family=Anek+Telugu:wght@421&family=Mallanna&family=Mandali&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to bottom right, #111, #333);
+      color: white;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 2em;
+      margin-bottom: 20px;
+    }
+
+    .search-bar {
+      position: fixed;
+  top: 0;
+  left: 0;
+  width:98%;
+  z-index: 9999;
+  background-color: rgba(0, 0, 0, 0.5); /* semi-transparent dark */
+  backdrop-filter: blur(8px);           /* blur mask */
+  -webkit-backdrop-filter: blur(8px);   /* for Safari */
+  padding: 12px 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      
+    }
+
+    input[type="text"] {
+      padding: 10px;
+      width: 90%;
+      max-width: 400px;
+      font-size: 16px;
+      border-radius: 10px;
+      border: none;
+      outline: none;
+      background: #b4b4b4;
+      color: black;
+      box-shadow: 0 0 5px rgba(0,255,255,0);
+    }
+
+    .section {
+      margin-bottom: 20px;
+      
+    }
+    .playlists {
+        padding-top:50px; 
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .section-header h2 {
+      font-size: 1.2em;
+      margin: 0;
+      color: #ccc;
+    }
+
+    .view-toggle {
+      font-size: 14px;
+      color: #00ffcc;
+      cursor: pointer;
+      
+    }
+
+    .album-container {
+      display: flex;
+      gap: 25px;
+      overflow-x: auto;
+      scroll-behavior: smooth;
+      padding-bottom: 10px;
+    }
+
+    .grid-view {
+      flex-wrap: wrap;
+      justify-content: center;
+      overflow-x: hidden;
+    }
+
+    .album {
+      flex: 0 0 auto;
+      background: #1e1e1e;
+      border-radius: 12px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+      padding: 10px;
+      width:100%;
+      height: 200px;
+      text-align: center;
+      animation: bounceIn 0.8s ease-out forwards;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-sizing: border-box;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .album::before {
+      content: "";
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(
+        120deg,
+        transparent 0%,
+        rgba(255, 255, 255, 0.1) 50%,
+        transparent 100%
+      );
+      transform: rotate(25deg);
+      animation: shimmer 3s infinite;
+      pointer-events: none;
+    }
+
+    @keyframes shimmer {
+      0% {
+        transform: translateX(-100%) rotate(25deg);
+      }
+      100% {
+        transform: translateX(100%) rotate(25deg);
+      }
+    }
+
+    .album:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 20px rgba(0, 255, 204, 0.3);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .image-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  border-radius: 10px;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+
+    .image-wrapper.loading::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, #2e2e2e 25%, #444 50%, #2e2e2e 75%);
+      background-size: 200% 100%;
+      animation: shimmerLoad 1.2s infinite;
+      border-radius: 10px;
+    }
+
+    @keyframes shimmerLoad {
+      0% {
+        background-position: -200% 0;
+      }
+      100% {
+        background-position: 200% 0;
+      }
+    }
+
+    .image-wrapper img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 10px;
+      display: block;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+      
+    }
+
+    .reflection {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: linear-gradient(
+        to bottom,
+        rgba(255, 255, 255, 0.15),
+        transparent
+      );
+      transform: scaleY(-1);
+      opacity: 0.25;
+      pointer-events: none;
+      border-radius: 10px;
+    }
+
+    .album h3 {
+      margin-top: 5px;
+      color: #00ffcc;
+      font-size: 0.8em;
+      margin-bottom:0;
+      font-family: 'Anek Telugu', sans-serif;
+    }
+
+    .play-button {
+      background: #00ffcc;
+      color: #111;
+      padding: 8px 14px;
+      border-radius: 20px;
+      font-size: 14px;
+      border: none;
+      margin-top: 8px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .play-button:hover {
+      background: #00ccb3;
+    }
+
+    @keyframes bounceIn {
+      0% {
+        transform: scale(0.8);
+        opacity: 0;
+      }
+      60% {
+        transform: scale(1.05);
+        opacity: 1;
+      }
+      80% {
+        transform: scale(0.95);
+        opacity: 1;
+      }
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    .hidden {
+      display: none !important;
+    }
+    
+.album.artist {
+  width: 150px;
+  height: 150px;
+}
+.album.artist .image-wrapper {
+  width: 120px;
+  height: 120px;
+  margin: 0 auto;
+  border-radius: 50%;
+  overflow: hidden;
+}
+.album.artist .image-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+.album.artist h3 {
+  text-align: center;
+  margin-top: 10px;
+}
+
+.album.artist .reflection {
+  border-radius: 50%;
+}
+<style>
+  /* ... మీ ఇతర styles అలాగే ఉంచండి ... */
+
+  /* ✅ Albums కోసం image-wrapper */
+  .image-wrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    border-radius: 10px;
+    background: #333;
+  }
+
+  .image-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+    display: block;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+  }
+
+  /* ✅ Artists-specific styles */
+  .album.artist {
+    width: 150px;
+    height: 190px;
+  }
+
+  .album.artist .image-wrapper {
+    width: 120px !important;
+    height: 120px !important;
+    margin: 0 auto;
+    border-radius: 50% !important;
+    overflow: hidden;
+    background: #333;
+  }
+
+  .album.artist .image-wrapper img {
+    border-radius: 50% !important;
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+  }
+
+  .album.artist .reflection {
+    border-radius: 50%;
+  }
+
+  .album.artist h3 {
+    text-align: center;
+    margin-top: 5px;
+    margin-bottom:0;
+    
+  }
+  
+  .album, .album.artist {
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.album:active,
+.album.artist:active {
+  transform: scale(0.95);
+}
+
+
+
+</style>
+
+
+  </style>
+</head>
+<body>
+  
+
+  <!-- Search Bar -->
+  <div class="search-bar">
+    <input type="text" id="searchInput" placeholder="Search Albums or Artists..." />
+  </div>
+  
+  <!-- Playlists Section -->
+  <div class="playlists">
+  <div class="section">
+    <div class="section-header">
+      <h2>Album</h2>
+      <div class="view-toggle" onclick="toggleView('playlists')">View All</div>
+    </div>
+    <div class="album-container" id="playlists">
+        
+    
+<div class="album" data-title="ALL SONGS" data-type="album" onclick="openAlbum('album.html')">
+  <div class="image-wrapper">
+    <img src="https://raw.githubusercontent.com/Rajatalluri91/World-of-God-Songs/refs/heads/main/WOG%20COVER.jpg" />
+    <div class="reflection"></div>
+  </div>
+  <h3>ALL SONGS</h3><br>
+</div>
+
+
+      
+</div>
+  <!-- Albums Section -->
+  <div class="section">
+    <div class="section-header">
+      <h2>Podcasts</h2>
+      <div class="view-toggle" onclick="toggleView('albums')">View All</div>
+    </div>
+    <div class="album-container" id="albums">
+        
+        
+        
+	  
+	  <div class="album" data-title="BIBLE PODCAST" data-type="album" 
+      onclick="openAlbum('')">
+          
+        <div class="image-wrapper">
+          <img src="https://raw.githubusercontent.com/Rajatalluri91/World-of-God-Songs/refs/heads/main/Bible%20Podcast.jpg" />
+          <div class="reflection"></div>
+        </div>
+        <h3>BIBLE PODCAST</h3><br>
+        
+      </div>
+      </div>
+      </div>
+</div>
+	  
+	  
+    </div>
+  </div>
+  
+  
+
+  <!-- Artists Section -->
+  <div class="section">
+    <div class="section-header">
+      <h2>Documents</h2>
+      <div class="view-toggle" onclick="toggleView('artists')">View All</div>
+    </div>
+    <div class="album-container artist" id="artists">
+      <div class="album artist" data-title="Biblical History" data-type="artist" onclick="openAlbum('')">
+        <div class="image-wrapper">
+          <img src="https://raw.githubusercontent.com/Rajatalluri91/World-of-God-Songs/refs/heads/main/Biblical%20History.jpg" />
+          <div class="reflection"></div>
+        </div>
+       
+        <h3>Biblical History</h3><br>
+        
+      </div>
+
+
+      <div class="album artist" data-title="The Apostles" data-type="artist" onclick="openAlbum('')">
+        <div class="image-wrapper">
+          <img src="https://raw.githubusercontent.com/Rajatalluri91/World-of-God-Songs/refs/heads/main/The%20Apostles.jpg" />
+          <div class="reflection"></div>
+        </div>        
+        <h3>The Apostles</h3><br>
+        
+      </div>
+      
+      
+        
+      </div>
+    </div>
+  </div>
+
+
+  
+  <script>
+    // Load Images
+    document.querySelectorAll(".image-wrapper").forEach((wrapper) => {
+      wrapper.classList.add("loading");
+      const img = wrapper.querySelector("img");
+      img.onload = () => {
+        wrapper.classList.remove("loading");
+        img.style.opacity = "1";
+      };
+    });
+
+    // View Toggle
+    function toggleView(sectionId) {
+      const container = document.getElementById(sectionId);
+      const toggleBtn = container.previousElementSibling.querySelector(".view-toggle");
+      const isGrid = container.classList.toggle("grid-view");
+      toggleBtn.textContent = isGrid ? "View Less" : "View All";
+    }
+
+   // Search Filter
+document.getElementById("searchInput").addEventListener("input", function () {
+  const query = this.value.toLowerCase();
+  document.querySelectorAll(".album").forEach((album) => {
+    const title = album.dataset.title.toLowerCase();
+    if (title.includes(query)) {
+      album.classList.remove("hidden");
+    } else {
+      album.classList.add("hidden");
+    }
+  });
+});
+
+
+  function openAlbum(url) {
+  const el = event.currentTarget;
+  el.classList.add('clicked');
+  setTimeout(() => {
+    el.classList.remove('clicked');
+    window.location.href = url; // ✅ same tab లో open అవుతుంది → back button perfectly పనిచేస్తుంది
+  }, 150);
+}
+
+  </script>
+</body>
+</html>
