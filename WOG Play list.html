@@ -11,8 +11,9 @@
       font-family: Arial, sans-serif;
       background: linear-gradient(to bottom right, #111, #333);
       color: white;
-      padding: 20px;
+      padding: 10px;
     }
+    
 
     h1 {
       text-align: center;
@@ -20,40 +21,14 @@
       margin-bottom: 20px;
     }
 
-    .search-bar {
-      position: fixed;
-  top: 0;
-  left: 0;
-  width:98%;
-  z-index: 9999;
-  background-color: rgba(0, 0, 0, 0.5); /* semi-transparent dark */
-  backdrop-filter: blur(8px);           /* blur mask */
-  -webkit-backdrop-filter: blur(8px);   /* for Safari */
-  padding: 12px 12px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-      
-    }
-
-    input[type="text"] {
-      padding: 10px;
-      width: 90%;
-      max-width: 400px;
-      font-size: 16px;
-      border-radius: 10px;
-      border: none;
-      outline: none;
-      background: #b4b4b4;
-      color: black;
-      box-shadow: 0 0 5px rgba(0,255,255,0);
-    }
-
+  
     .section {
       margin-bottom: 20px;
       
     }
     .playlists {
-        padding-top:50px; 
-    }
+  padding-top: 60px;   /* header height + spacing */
+}
 
     .section-header {
       display: flex;
@@ -132,12 +107,6 @@
       100% {
         transform: translateX(100%) rotate(25deg);
       }
-    }
-
-    .album:hover {
-      transform: scale(1.05);
-      box-shadow: 0 6px 20px rgba(0, 255, 204, 0.3);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
 
     .image-wrapper img {
@@ -248,32 +217,6 @@
       display: none !important;
     }
     
-.album.artist {
-  width: 150px;
-  height: 150px;
-}
-.album.artist .image-wrapper {
-  width: 120px;
-  height: 120px;
-  margin: 0 auto;
-  border-radius: 50%;
-  overflow: hidden;
-}
-.album.artist .image-wrapper img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 50%;
-}
-.album.artist h3 {
-  text-align: center;
-  margin-top: 10px;
-}
-
-.album.artist .reflection {
-  border-radius: 50%;
-}
-<style>
   /* ... మీ ఇతర styles అలాగే ఉంచండి ... */
 
   /* ✅ Albums కోసం image-wrapper */
@@ -346,7 +289,7 @@
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 45px;
+  height: 25px;
   background: rgba(0, 0, 0, 0.6);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
@@ -369,19 +312,246 @@ body {
   padding-bottom: 60px;
 }
 
+/* =========================
+   ✅ MOBILE RESPONSIVE FIX
+   ========================= */
 
-</style>
+/* Album container – smooth scroll */
+.album-container {
+  display: flex;
+  gap: 14px;
+  overflow-x: auto;
+  padding-bottom: 10px;
+}
+
+/* Album card – mobile width */
+.album {
+  flex: 0 0 75%;        /* 🔥 mobile lo 75% width */
+  max-width: 75%;
+  height: auto;         /* 🔥 auto height */
+  padding: 10px;
+}
+
+/* Image wrapper – fixed ratio */
+.album .image-wrapper {
+  width: 100%;
+  aspect-ratio: 1 / 1;  /* 🔥 square image */
+  border-radius: 12px;
+  overflow: hidden;
+  background: #222;
+  position: relative;
+}
+
+/* Image perfectly fit */
+.album .image-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;    /* 🔥 image fit */
+  display: block;
+  border-radius: 12px;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+/* Title spacing */
+.album h3 {
+  margin: 8px 0 0 0;
+  font-size: 0.85em;
+  line-height: 1.2;
+  text-align: center;
+}
+
+/* Desktop / Tablet view */
+@media (min-width: 768px) {
+  .album {
+    flex: 0 0 180px;
+    max-width: 180px;
+  }
+}
+.album {
+  flex: 0 0 100%;
+  max-width: 100%;
+}
+
+/* =========================
+   DOCUMENTS (ARTISTS) FIX
+   ========================= */
+
+#artists {
+  gap: 16px;
+}
+
+.album.artist {
+  flex: 0 0 140px;     /* 🔥 device width కాదు */
+  max-width: 140px;
+  height: 190px;
+}
+
+.album.artist .image-wrapper {
+  width: 120px;
+  height: 120px;
+  aspect-ratio: 1 / 1;
+  border-radius: 50%;
+  margin: 0 auto;
+}
+
+.album.artist .image-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;   /* 🔥 image fit */
+  border-radius: 50%;
+}
+
+.album.artist h3 {
+  font-size: 0.8em;
+  text-align: center;
+}
+
+/* =========================
+   PREMIUM TOUCH EFFECT
+   ========================= */
+
+.album,
+.album.artist {
+  transition: transform 0.15s ease, opacity 0.15s ease;
+  -webkit-tap-highlight-color: transparent; /* 🔥 blue flash remove */
+}
+
+/* Touch / Click */
+.album:active,
+.album.artist:active {
+  transform: scale(0.96);     /* 🔥 natural press */
+  opacity: 0.85;              /* 🔥 subtle dim */
+}
+.album::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(255,255,255,0.08);
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+.album:active::after {
+  opacity: 1;
+}
+
+.album {
+  position: relative;
+  overflow: hidden;   /* 🔥 important */
+}
+
+/* =========================
+   CARD ROTATING STROKE
+   ========================= */
+
+.album::before {
+  content: "";
+  position: absolute;
+  inset: -2px;                 /* stroke thickness */
+  border-radius: 14px;         /* card radius + little extra */
+  background: conic-gradient(
+    from 0deg,
+    transparent 0deg,
+    #00ffcc 90deg,
+    transparent 180deg,
+    transparent 360deg
+  );
+  animation: cardSpin 1.6s linear infinite;
+  opacity: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Mask inner content so only border shows */
+.album::after {
+  content: "";
+  position: absolute;
+  inset: 2px;                  /* border width control */
+  background: #1e1e1e;          /* SAME as card bg */
+  border-radius: 12px;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* Bring content above mask */
+.album > * {
+  position: relative;
+  z-index: 2;
+}
+
+/* Touch trigger */
+.album:active::before {
+  opacity: 1;
+}
+
+@keyframes cardSpin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
 
 
+/* =========================
+   TOP APP HEADER
+   ========================= */
+
+.app-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 52px;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  z-index: 10000;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+}
+
+.app-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.profile-pic {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.app-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #ffffff;
+  white-space: nowrap;
+}
+/* Header hide animation */
+.app-header {
+  transition: transform 0.3s ease;
+}
+
+/* Hidden state */
+.app-header.hide {
+  transform: translateY(-100%);
+}
   </style>
 </head>
 <body>
-  
-
-  <!-- Search Bar -->
-  <div class="search-bar">
-    <input type="text" id="searchInput" placeholder="Search Albums or Artists..." />
+  <!-- Top App Header -->
+<div class="app-header">
+  <div class="app-left">
+    <img 
+      src="https://raw.githubusercontent.com/Rajatalluri91/WOG-Images/refs/heads/main/icon-192.png" 
+      alt="Profile" 
+      class="profile-pic"
+    />
+    <span class="app-title">World of God Music App</span>
   </div>
+</div>
   
   <!-- Playlists Section -->
   <div class="playlists">
@@ -395,15 +565,13 @@ body {
     
 <div class="album" data-title="ALL SONGS" data-type="album" onclick="location.href='album.html'">
   <div class="image-wrapper">
-    <img src="https://raw.githubusercontent.com/Rajatalluri91/World-of-God-Songs/refs/heads/main/WOG%20COVER.jpg" />
+    <img src="https://github.com/Rajatalluri91/WOG-Images/blob/main/Songs%20Cover.jpg?raw=true" />
     <div class="reflection"></div>
   </div>
-  <h3>ALL SONGS</h3><br>
+  <h3>DEVUNI PRAPANCHAM SONGS</h3>
+</div>     
 </div>
-
-
-      
-</div>
+<br>
   <!-- Albums Section -->
   <div class="section">
     <div class="section-header">
@@ -419,10 +587,10 @@ body {
       onclick="location.href='Available Soon.html'">
           
         <div class="image-wrapper">
-          <img src="https://raw.githubusercontent.com/Rajatalluri91/World-of-God-Songs/refs/heads/main/Bible%20Podcast.jpg" />
+          <img src="https://github.com/Rajatalluri91/WOG-Images/blob/main/Podcast%202.jpg?raw=true" />
           <div class="reflection"></div>
         </div>
-        <h3>BIBLE PODCAST</h3><br>
+        <h3>BIBLE PODCAST</h3>
         
       </div>
       </div>
@@ -441,10 +609,10 @@ body {
     <div class="album" data-title="SUNDAY MESSAGE" data-type="album"
       onclick="location.href='Available Soon.html'">
       <div class="image-wrapper">
-        <img src="https://github.com/Rajatalluri91/WOG-PODCAST-/blob/main/Audio%20Messages.jpg?raw=true" />
+        <img src="https://raw.githubusercontent.com/Rajatalluri91/WOG-Images/refs/heads/main/Audio%20Messages.jpg" />
         <div class="reflection"></div>
       </div>
-      <h3>Sunday Message</h3><br>
+      <h3>BIBLE CLASSES</h3>
     </div>
 
     
@@ -516,18 +684,6 @@ body {
       toggleBtn.textContent = isGrid ? "View Less" : "View All";
     }
 
-   // Search Filter
-document.getElementById("searchInput").addEventListener("input", function () {
-  const query = this.value.toLowerCase();
-  document.querySelectorAll(".album").forEach((album) => {
-    const title = album.dataset.title.toLowerCase();
-    if (title.includes(query)) {
-      album.classList.remove("hidden");
-    } else {
-      album.classList.add("hidden");
-    }
-  });
-});
 
 
   function openAlbum(url) {
@@ -540,5 +696,23 @@ document.getElementById("searchInput").addEventListener("input", function () {
 }
 
   </script>
+  <script>
+  let lastScrollY = window.scrollY;
+  const header = document.querySelector(".app-header");
+
+  window.addEventListener("scroll", () => {
+    const currentScrollY = window.scrollY;
+
+    if (currentScrollY > lastScrollY && currentScrollY > 60) {
+      // 🔽 scrolling down → hide header
+      header.classList.add("hide");
+    } else {
+      // 🔼 scrolling up → show header
+      header.classList.remove("hide");
+    }
+
+    lastScrollY = currentScrollY;
+  });
+</script>
 </body>
 </html>
