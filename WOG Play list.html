@@ -1,742 +1,388 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="te">
 <head>
-  <meta charset="UTF-8" />
-  <title>WORLD OF GOD PLAYLIST</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> <link href="https://fonts.googleapis.com/css2?family=Anek+Telugu:wght@421&family=Mallanna&family=Mandali&display=swap" rel="stylesheet">
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: linear-gradient(to bottom right, #111, #333);
-      color: white;
-      padding: 10px;
-    }
-    
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <title>World of God - Raja Talluri</title>
+    <link crossorigin="anonymous" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Mandali&display=swap" rel="stylesheet"/>
+    <style>
+        :root {
+            --accent: #ffe98a;
+            --bg-dark: #000000;
+            --glass: rgba(255, 255, 255, 0.08);
+            --text-main: #ffffff;
+            --text-dim: #b3b3b3;
+            --nav-bg: #0a0a0a;
+        }
 
-    h1 {
-      text-align: center;
-      font-size: 2em;
-      margin-bottom: 20px;
-    }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; user-select: none; }
+        body { margin: 0; background: #000; color: var(--text-main); font-family: 'Mandali', sans-serif; height: 100vh; overflow: hidden; }
 
-  
-    .section {
-      margin-bottom: 20px;
-      
-    }
-    .playlists {
-  padding-top: 60px;   /* header height + spacing */
-}
+        .main-content { height: calc(100vh - 135px); overflow-y: auto; padding: 20px 15px; display: none; scroll-behavior: smooth; }
+        .main-content.active { display: block; }
 
-    .section-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 10px;
-    }
+        .section-header { display: flex; justify-content: space-between; align-items: center; padding: 0 5px; margin-top: 5px; margin-bottom: 10px; }
+        .gold-text { background: linear-gradient(90deg, #d4af37, #f8e7a1, #c5a100); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: bold; font-size: 24px; margin: 0; padding-bottom: 10px; }
 
-    .section-header h2 {
-      font-size: 1.2em;
-      margin: 0;
-      color: #ccc;
-    }
+        .horizontal-scroll { display: flex; overflow-x: auto; gap: 15px; padding: 10px 5px; scrollbar-width: none; }
+        .horizontal-scroll::-webkit-scrollbar { display: none; }
 
-    .view-toggle {
-      font-size: 14px;
-      color: #00ffcc;
-      cursor: pointer;
-      
-    }
+        .category-card { flex: 0 0 140px; background: var(--glass); border-radius: 15px; overflow: hidden; text-align: center; padding-bottom: 10px; border: 1px solid rgba(255,255,255,0.05); cursor: pointer; transition: 0.3s; }
+        .category-card img { width: 100%; aspect-ratio: 1/1; object-fit: cover; background: #222; }
+        .category-card span { display: block; margin-top: 8px; font-size: 13px; color: var(--accent); padding: 0 5px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
-    .album-container {
-      display: flex;
-      gap: 25px;
-      overflow-x: auto;
-      scroll-behavior: smooth;
-      padding-bottom: 10px;
-    }
+        .track-item { display: flex; align-items: center; padding: 12px; margin-bottom: 10px; background: var(--glass); border-radius: 12px; border: 1px solid transparent; cursor: pointer; transition: 0.3s; }
+        .track-item.active-song { border: 1px solid var(--accent); background: rgba(255, 233, 138, 0.15); }
+        .track-item.active-song div { color: var(--accent); font-weight: bold; }
 
-    .grid-view {
-      flex-wrap: wrap;
-      justify-content: center;
-      overflow-x: hidden;
-    }
+        .player-ctn { position: fixed; bottom: 70px; left: 0; width: 100%; background: #111; border-top: 1px solid rgba(255,255,255,0.1); transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); z-index: 3000; height: 65px; cursor: pointer; }
+        .player-ctn.expanded { height: 100vh; bottom: 0; background: #000; cursor: default; }
+        
+        .mini-player-content { display: flex; align-items: center; padding: 10px; height: 65px; width: 100%; }
+        .player-ctn.expanded .mini-player-content { display: none; }
 
-    .album {
-      flex: 0 0 auto;
-      background: #1e1e1e;
-      border-radius: 12px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-      padding: 10px;
-      width:100%;
-      height: 200px;
-      text-align: center;
-      animation: bounceIn 0.8s ease-out forwards;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      box-sizing: border-box;
-      position: relative;
-      overflow: hidden;
-    }
+        .expanded-view { display: none; flex-direction: column; height: 100%; padding: 40px 25px 30px; justify-content: space-between; }
+        .player-ctn.expanded .expanded-view { display: flex; }
 
-    .album::before {
-      content: "";
-      position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: linear-gradient(
-        120deg,
-        transparent 0%,
-        rgba(255, 255, 255, 0.1) 50%,
-        transparent 100%
-      );
-      transform: rotate(25deg);
-      animation: shimmer 3s infinite;
-      pointer-events: none;
-    }
+        .mini-art { width: 45px; height: 45px; border-radius: 8px; background-size: cover; background-position: center; }
+        .big-art-container { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; position: relative; }
+        .big-art { width: 85vw; max-width: 320px; aspect-ratio: 1/1; border-radius: 20px; background-size: cover; background-position: center; box-shadow: 0 20px 60px rgba(0,0,0,0.8); transition: 0.3s; }
 
-    @keyframes shimmer {
-      0% {
-        transform: translateX(-100%) rotate(25deg);
-      }
-      100% {
-        transform: translateX(100%) rotate(25deg);
-      }
-    }
+        .lyrics-area { display: none; width: 100%; height: 350px; overflow-y: auto; text-align: center; color: var(--accent); mask-image: linear-gradient(to bottom, transparent, black 20%, black 80%, transparent); }
+        .show-lyrics .big-art { display: none; }
+        .show-lyrics .lyrics-area { display: block; }
+        .lyric-line { opacity: 0.3; margin: 20px 0; transition: 0.3s; font-size: 1.3rem; line-height: 1.6; }
+        .lyric-line.active { opacity: 1; transform: scale(1.1); font-weight: bold; }
 
-    .image-wrapper img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-  border-radius: 10px;
-  opacity: 0;
-  transition: opacity 0.5s ease;
-}
+        #myProgress { width: 100%; height: 6px; background: rgba(255,255,255,0.1); border-radius: 10px; margin: 25px 0; cursor: pointer; }
+        #myBar { height: 100%; background: var(--accent); width: 0%; border-radius: 10px; }
+        .play-pause-circle { width: 70px; height: 70px; background: var(--accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #000; font-size: 28px; }
 
-
-    .image-wrapper.loading::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, #2e2e2e 25%, #444 50%, #2e2e2e 75%);
-      background-size: 200% 100%;
-      animation: shimmerLoad 1.2s infinite;
-      border-radius: 10px;
-    }
-
-    @keyframes shimmerLoad {
-      0% {
-        background-position: -200% 0;
-      }
-      100% {
-        background-position: 200% 0;
-      }
-    }
-
-    .image-wrapper img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      border-radius: 10px;
-      display: block;
-      opacity: 0;
-      transition: opacity 0.5s ease;
-      
-    }
-
-    .reflection {
-      position: absolute;
-      top: 100%;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-image: linear-gradient(
-        to bottom,
-        rgba(255, 255, 255, 0.15),
-        transparent
-      );
-      transform: scaleY(-1);
-      opacity: 0.25;
-      pointer-events: none;
-      border-radius: 10px;
-    }
-
-    .album h3 {
-      margin-top: 5px;
-      color: #00ffcc;
-      font-size: 0.8em;
-      margin-bottom:0;
-      font-family: 'Anek Telugu', sans-serif;
-    }
-
-    .play-button {
-      background: #00ffcc;
-      color: #111;
-      padding: 8px 14px;
-      border-radius: 20px;
-      font-size: 14px;
-      border: none;
-      margin-top: 8px;
-      cursor: pointer;
-      transition: background 0.3s ease;
-    }
-
-    .play-button:hover {
-      background: #00ccb3;
-    }
-
-    @keyframes bounceIn {
-      0% {
-        transform: scale(0.8);
-        opacity: 0;
-      }
-      60% {
-        transform: scale(1.05);
-        opacity: 1;
-      }
-      80% {
-        transform: scale(0.95);
-        opacity: 1;
-      }
-      100% {
-        transform: scale(1);
-        opacity: 1;
-      }
-    }
-
-    .hidden {
-      display: none !important;
-    }
-    
-  /* ... మీ ఇతర styles అలాగే ఉంచండి ... */
-
-  /* ✅ Albums కోసం image-wrapper */
-  .image-wrapper {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    border-radius: 10px;
-    background: #333;
-  }
-
-  .image-wrapper img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 10px;
-    display: block;
-    opacity: 0;
-    transition: opacity 0.5s ease;
-  }
-
-  /* ✅ Artists-specific styles */
-  .album.artist {
-    width: 150px;
-    height: 190px;
-  }
-
-  .album.artist .image-wrapper {
-    width: 120px !important;
-    height: 120px !important;
-    margin: 0 auto;
-    border-radius: 50% !important;
-    overflow: hidden;
-    background: #333;
-  }
-
-  .album.artist .image-wrapper img {
-    border-radius: 50% !important;
-    object-fit: cover;
-    width: 100%;
-    height: 100%;
-    opacity: 0;
-    transition: opacity 0.5s ease;
-  }
-
-  .album.artist .reflection {
-    border-radius: 50%;
-  }
-
-  .album.artist h3 {
-    text-align: center;
-    margin-top: 5px;
-    margin-bottom:0;
-    
-  }
-  
-  .album, .album.artist {
-  cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-.album:active,
-.album.artist:active {
-  transform: scale(0.95);
-}
-
-/* ✅ Fixed Footer */
-.footer {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 25px;
-  background: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 13px;
-  color: #ccc;
-  z-index: 9999;
-  box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.4);
-}
-
-.footer span {
-  color: #00ffcc;
-  font-weight: 500;
-}
-
-/* ✅ Footer height compensate */
-body {
-  padding-bottom: 60px;
-}
-
-/* =========================
-   ✅ MOBILE RESPONSIVE FIX
-   ========================= */
-
-/* Album container – smooth scroll */
-.album-container {
-  display: flex;
-  gap: 14px;
-  overflow-x: auto;
-  padding-bottom: 10px;
-}
-
-/* Album card – mobile width */
-.album {
-  flex: 0 0 75%;        /* 🔥 mobile lo 75% width */
-  max-width: 75%;
-  height: auto;         /* 🔥 auto height */
-  padding: 10px;
-}
-
-/* Image wrapper – fixed ratio */
-.album .image-wrapper {
-  width: 100%;
-  aspect-ratio: 1 / 1;  /* 🔥 square image */
-  border-radius: 12px;
-  overflow: hidden;
-  background: #222;
-  position: relative;
-}
-
-/* Image perfectly fit */
-.album .image-wrapper img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;    /* 🔥 image fit */
-  display: block;
-  border-radius: 12px;
-  opacity: 0;
-  transition: opacity 0.5s ease;
-}
-
-/* Title spacing */
-.album h3 {
-  margin: 8px 0 0 0;
-  font-size: 0.85em;
-  line-height: 1.2;
-  text-align: center;
-}
-
-/* Desktop / Tablet view */
-@media (min-width: 768px) {
-  .album {
-    flex: 0 0 180px;
-    max-width: 180px;
-  }
-}
-.album {
-  flex: 0 0 100%;
-  max-width: 100%;
-}
-
-/* =========================
-   DOCUMENTS (ARTISTS) FIX
-   ========================= */
-
-#artists {
-  gap: 16px;
-}
-
-.album.artist {
-  flex: 0 0 140px;     /* 🔥 device width కాదు */
-  max-width: 140px;
-  height: 190px;
-}
-
-.album.artist .image-wrapper {
-  width: 120px;
-  height: 120px;
-  aspect-ratio: 1 / 1;
-  border-radius: 50%;
-  margin: 0 auto;
-}
-
-.album.artist .image-wrapper img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;   /* 🔥 image fit */
-  border-radius: 50%;
-}
-
-.album.artist h3 {
-  font-size: 0.8em;
-  text-align: center;
-}
-
-/* =========================
-   PREMIUM TOUCH EFFECT
-   ========================= */
-
-.album,
-.album.artist {
-  transition: transform 0.15s ease, opacity 0.15s ease;
-  -webkit-tap-highlight-color: transparent; /* 🔥 blue flash remove */
-}
-
-/* Touch / Click */
-.album:active,
-.album.artist:active {
-  transform: scale(0.96);     /* 🔥 natural press */
-  opacity: 0.85;              /* 🔥 subtle dim */
-}
-.album::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: rgba(255,255,255,0.08);
-  opacity: 0;
-  transition: opacity 0.15s ease;
-}
-
-.album:active::after {
-  opacity: 1;
-}
-
-.album {
-  position: relative;
-  overflow: hidden;   /* 🔥 important */
-}
-
-/* =========================
-   CARD ROTATING STROKE
-   ========================= */
-
-.album::before {
-  content: "";
-  position: absolute;
-  inset: -2px;                 /* stroke thickness */
-  border-radius: 14px;         /* card radius + little extra */
-  background: conic-gradient(
-    from 0deg,
-    transparent 0deg,
-    #00ffcc 90deg,
-    transparent 180deg,
-    transparent 360deg
-  );
-  animation: cardSpin 1.6s linear infinite;
-  opacity: 0;
-  z-index: 0;
-  pointer-events: none;
-}
-
-/* Mask inner content so only border shows */
-.album::after {
-  content: "";
-  position: absolute;
-  inset: 2px;                  /* border width control */
-  background: #1e1e1e;          /* SAME as card bg */
-  border-radius: 12px;
-  z-index: 1;
-  pointer-events: none;
-}
-
-/* Bring content above mask */
-.album > * {
-  position: relative;
-  z-index: 2;
-}
-
-/* Touch trigger */
-.album:active::before {
-  opacity: 1;
-}
-
-@keyframes cardSpin {
-  from { transform: rotate(0deg); }
-  to   { transform: rotate(360deg); }
-}
-
-
-/* =========================
-   TOP APP HEADER
-   ========================= */
-
-.app-header {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 52px;
-  background: rgba(0, 0, 0, 0.55);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  display: flex;
-  align-items: center;
-  padding: 0 12px;
-  z-index: 10000;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.4);
-}
-
-.app-left {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.profile-pic {
-  width: 34px;
-  height: 34px;
-  border-radius: 50%;
-  object-fit: cover;
-}
-.app-title {
-  font-size: 14px;
-  font-weight: 600;
-  color: #ffffff;
-  white-space: nowrap;
-}
-/* Header hide animation */
-.app-header {
-  transition: transform 0.3s ease;
-}
-
-/* Hidden state */
-.app-header.hide {
-  transform: translateY(-100%);
-}
-  </style>
+        .bottom-nav { position: fixed; bottom: 0; width: 100%; height: 70px; background: var(--nav-bg); display: flex; justify-content: space-around; align-items: center; border-top: 1px solid rgba(255,255,255,0.1); z-index: 2000; }
+        .nav-item { display: flex; flex-direction: column; align-items: center; color: var(--text-dim); font-size: 11px; opacity: 0.7; cursor: pointer; }
+        .nav-item.active { color: var(--accent); opacity: 1; }
+        .nav-item i { font-size: 22px; margin-bottom: 4px; }
+    </style>
 </head>
 <body>
-  <!-- Top App Header -->
-<div class="app-header">
-  <div class="app-left">
-    <img 
-      src="https://raw.githubusercontent.com/Rajatalluri91/WOG-Images/refs/heads/main/icon-192.png" 
-      alt="Profile" 
-      class="profile-pic"
-    />
-    <span class="app-title">World of God Music App</span>
-  </div>
-</div>
-  
-  <!-- Playlists Section -->
-  <div class="playlists">
-  <div class="section">
-    <div class="section-header">
-      <h2>Album</h2>
-      <div class="view-toggle" onclick="toggleView('playlists')">View All</div>
-    </div>
-    <div class="album-container" id="playlists">
-        
-    
-<div class="album" data-title="ALL SONGS" data-type="album" onclick="location.href='album.html'">
-  <div class="image-wrapper">
-    <img src="https://github.com/Rajatalluri91/WOG-Images/blob/main/Songs%20Cover.jpg?raw=true" />
-    <div class="reflection"></div>
-  </div>
-  <h3>DEVUNI PRAPANCHAM SONGS</h3>
-</div>     
-</div>
-<br>
 
-
-<!-- Podcasts Section -->
-<div class="section">
-  <div class="section-header">
-    <h2>Podcasts</h2>
-    <div class="view-toggle" onclick="toggleView('albums')">View All</div>
-  </div>
-
-  <div class="album-container" id="albums">
-
-    <a href="https://rajatalluri91.github.io/WOG-PODCAST-/WOG%20Podcast.html"
-       target="_self"
-       style="text-decoration:none;color:inherit">
-
-      <div class="album" data-title="BIBLE PODCAST">
-        <div class="image-wrapper">
-          <img src="https://github.com/Rajatalluri91/WOG-Images/blob/main/Podcast%202.jpg?raw=true" />
-          <div class="reflection"></div>
+<div id="home-sec" class="main-content active">
+    <h2 class="gold-text">World of God</h2>
+    <div class="section-header"><h3>Album Songs</h3></div>
+    <div class="horizontal-scroll">
+        <div class="category-card" onclick="loadPlaylist('devotional')">
+            <img src="https://github.com/Rajatalluri91/WOG-Images/blob/main/Songs%20Cover.jpg?raw=true">
+            <span>Devuni Prapancham</span>
         </div>
-        <h3>BIBLE PODCAST</h3>
-      </div>
-
-    </a>
-
-  </div>
-</div>
-
-	
-	
-	
-<!-- Messages Section -->
-<div class="section">
-  <div class="section-header">
-    <h2>Audio Messages</h2>
-    <div class="view-toggle" onclick="toggleView('messages')">View All</div>
-  </div>
-
-  <div class="album-container" id="messages">
-
-    <div class="album" data-title="SUNDAY MESSAGE" data-type="album"
-      onclick="location.href='Available Soon.html'">
-      <div class="image-wrapper">
-        <img src="https://raw.githubusercontent.com/Rajatalluri91/WOG-Images/refs/heads/main/Audio%20Messages.jpg" />
-        <div class="reflection"></div>
-      </div>
-      <h3>BIBLE CLASSES</h3>
-    </div>
-</div>
-</div>
-	
-  
-  
-
-  <!-- Artists Section -->
-  <div class="section">
-    <div class="section-header">
-      <h2>Documents</h2>
-      <div class="view-toggle" onclick="toggleView('artists')">View All</div>
-    </div>
-    <div class="album-container artist" id="artists">
-      <div class="album artist" data-title="Biblical History" data-type="artist" onclick="location.href='Available Soon.html'">
-        <div class="image-wrapper">
-          <img src="https://raw.githubusercontent.com/Rajatalluri91/World-of-God-Songs/refs/heads/main/Biblical%20History.jpg" />
-          <div class="reflection"></div>
+        <div class="category-card" onclick="loadPlaylist('newyear')">
+            <img src="https://raw.githubusercontent.com/Rajatalluri91/WOG-Images/refs/heads/main/Children%20Songs.jpg">
+            <span>Children Songs</span>
         </div>
-       
-        <h3>Biblical History</h3><br>
-        
-      </div>
-
-
-      <div class="album artist" data-title="The Apostles" data-type="artist" onclick="location.href='Available Soon.html'">
-        <div class="image-wrapper">
-          <img src="https://raw.githubusercontent.com/Rajatalluri91/World-of-God-Songs/refs/heads/main/The%20Apostles.jpg" />
-          <div class="reflection"></div>
-        </div>        
-        <h3>The Apostles</h3><br>
-        
-      </div>
-       
-      </div>
     </div>
-  </div>
-
-<!-- Video Section -->
-<div class="section">
-  <div class="section-header">
-    <h2>Videos</h2>
-    <div class="view-toggle" onclick="toggleView('videos')">View All</div>
-
-  </div>
-
-  <a href="https://rajatalluri91.github.io/WOG-Youtube/"
-   target="_self"
-   style="text-decoration:none;color:inherit">
-
-  <div class="album" data-title="SONGS">
-    <div class="image-wrapper">
-      <img src="https://github.com/Rajatalluri91/WOG-Images/blob/main/Video%20Songs.jpg?raw=true" />
-      <div class="reflection"></div>
-    </div>
-    <h3>VIDEO SONGS</h3>
-  </div>
-
-</a>
-
-	  
-    </div>
-  </div>
-
-<!-- Fixed Footer -->
-<div class="footer">
-  Developed by <span>&nbsp;Raja Talluri</span>
+    <div class="playlist-ctn"></div>
 </div>
 
-  
-  <script>
-    // Load Images
-    document.querySelectorAll(".image-wrapper").forEach((wrapper) => {
-      wrapper.classList.add("loading");
-      const img = wrapper.querySelector("img");
-      img.onload = () => {
-        wrapper.classList.remove("loading");
-        img.style.opacity = "1";
-      };
-    });
 
-    // View Toggle
-    function toggleView(sectionId) {
-      const container = document.getElementById(sectionId);
-      const toggleBtn = container.previousElementSibling.querySelector(".view-toggle");
-      const isGrid = container.classList.toggle("grid-view");
-      toggleBtn.textContent = isGrid ? "View Less" : "View All";
+
+
+<div id="bible-sec" class="main-content">
+    <h2 class="gold-text">పరిశుద్ధ గ్రంథము</h2>
+    <div class="section-header"><h3>బైబిల్ నేర్చుకుందాం</h3></div>
+    <div class="horizontal-scroll">
+        <div class="category-card" onclick="window.open('https://rajatalluri91.github.io/Wog-Telugu-Bible/', '_self')">
+            <img src="https://raw.githubusercontent.com/Rajatalluri91/WOG-Images/refs/heads/main/Telugu%20Bible.jpg">
+            <span>Telugu Bible</span>
+        </div>
+        <div class="category-card" onclick="window.location.href='https://rajatalluri91.github.io/Wog-Telugu-Bible/'">
+            <img src="https://raw.githubusercontent.com/Rajatalluri91/WOG-Images/refs/heads/main/The%20Bible.jpg">
+            <span>Bible Books Overview</span>
+        </div>
+    </div>
+</div>
+
+<div id="video-sec" class="main-content">
+    <h2 class="gold-text">వీడియోలు</h2>
+    <div class="section-header"><h3>Video Songs</h3></div>
+    <div class="horizontal-scroll">
+        <div class="category-card" onclick="window.location.href='https://rajatalluri91.github.io/World-of-God-/'">
+            <img src="https://via.placeholder.com/300/000/red?text=YouTube">
+            <span>Video Songs</span>
+        </div>
+        <div class="category-card" onclick="#">
+            <img src="https://via.placeholder.com/300/000/red?text=YouTube">
+            <span>Short Videos</span>
+        </div>
+    </div>
+</div>
+
+<div id="messages-sec" class="main-content">
+    <h2 class="gold-text">Audio Messages</h2>
+    <div class="section-header"><h3>Podcast</h3></div>
+    <div class="horizontal-scroll">
+        <div class="category-card" onclick="loadPlaylist('sermons')">
+            <img src="https://raw.githubusercontent.com/Rajatalluri91/WOG-Images/refs/heads/main/Podcast%202.jpg">
+            <span>Podcast</span>
+        </div>
+    </div>
+    <div class="playlist-ctn"></div>
+</div>
+
+<div id="video-sec" class="main-content"><h2 class="gold-text">వీడియోలు</h2></div>
+<div id="docs-sec" class="main-content"><h2 class="gold-text">Documents</h2></div>
+
+<div class="player-ctn" id="mainPlayer" onclick="handleMiniPlayerClick(event)">
+    <div class="mini-player-content">
+        <div class="mini-art" id="miniArt" onclick="toggleExpand(event)"></div>
+        <div style="flex-grow:1; margin-left:12px; overflow:hidden;" onclick="toggleExpand(event)">
+            <div id="mini-title" style="font-size:14px; font-weight:bold; white-space:nowrap; text-overflow:ellipsis;">పాటను ఎంచుకోండి</div>
+            <div id="mini-timer" style="font-size:11px; color:var(--accent);">00:00</div>
+        </div>
+        <div style="padding: 0 15px;">
+             <i class="fas fa-play" id="m-play" onclick="toggleAudio(event)"></i>
+             <i class="fas fa-pause" id="m-pause" style="display:none" onclick="toggleAudio(event)"></i>
+        </div>
+    </div>
+
+    <div class="expanded-view">
+        <div style="display:flex; justify-content: space-between; align-items: center; width:100%;" onclick="closePlayer(event)">
+            <i class="fas fa-chevron-down" style="color:var(--accent); font-size:24px;"></i>
+            <span style="font-size:12px; opacity:0.6; letter-spacing: 2px;">NOW PLAYING</span>
+            <i class="fas fa-ellipsis-v" style="opacity:0"></i>
+        </div>
+        <div class="big-art-container" id="artBox" onclick="toggleLyrics(event)">
+            <div class="big-art" id="exp-art"></div>
+            <div class="lyrics-area" id="lyricsText"></div>
+            <p id="tap-hint" style="text-align:center; font-size:12px; margin-top:10px; opacity:0.5;">Tap for Lyrics</p>
+        </div>
+        <div style="width:100%;">
+            <h2 id="exp-title" style="color:var(--accent); margin:0; text-align:center; font-size:20px;">Song Title</h2>
+            <div id="myProgress" onclick="seek(event)"><div id="myBar"></div></div>
+            <div style="display:flex; justify-content:space-between; font-size:12px; color:var(--text-dim); margin-top:-15px;">
+                <span id="currTime">00:00</span>
+                <span id="totalTime">00:00</span>
+            </div>
+            <div style="display:flex; justify-content:space-around; align-items:center; margin-top:20px;">
+                <div class="speed-tag" onclick="changeSpeed(event)" id="speedBtn" style="color:var(--accent)">1x</div>
+                <i class="fas fa-step-backward" onclick="previous(event)" style="font-size:25px;"></i>
+                <div class="play-pause-circle" onclick="toggleAudio(event)">
+                    <i class="fas fa-play" id="e-play"></i><i class="fas fa-pause" id="e-pause" style="display:none"></i>
+                </div>
+                <i class="fas fa-step-forward" onclick="next(event)" style="font-size:25px;"></i>
+                <i class="fas fa-download" onclick="downloadSong(event)" style="font-size:20px;"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+<nav class="bottom-nav">
+    <div class="nav-item active" onclick="showSection('home-sec', this)"><i class="fas fa-home"></i>Home</div>
+    <div class="nav-item" onclick="showSection('bible-sec', this)"><i class="fas fa-book"></i>Bible</div>
+    <div class="nav-item" onclick="showSection('messages-sec', this)"><i class="fas fa-microphone"></i>Messages</div>
+    <div class="nav-item" onclick="showSection('video-sec', this)"><i class="fas fa-play-circle"></i>Videos</div>
+    <div class="nav-item" onclick="showSection('docs-sec', this)"><i class="fas fa-file-alt"></i>Docs</div>
+</nav>
+
+<audio id="myAudio"></audio>
+
+<script>
+const audioData = {
+    devotional: [
+        { name:"సృష్టిలో విలువైనది స్నేహమే", file:"https://raw.githubusercontent.com/Rajatalluri91/World-of-God-Songs/main/Devuni%20Sneham.mp3", duration:"04:18", art:"https://github.com/Rajatalluri91/WOG-Images/blob/main/Songs%20Cover.jpg?raw=true", lrc:"https://raw.githubusercontent.com/Rajatalluri91/World-of-God-Songs/refs/heads/main/Lyrics/Devuni%20Sneham%20.lrc" },
+        { name:"తుదివరకు నిలుచుటయే", file:"https://raw.githubusercontent.com/Rajatalluri91/World-of-God-Songs/main/Thudivaraku.mp3", duration:"05:13", art:"https://github.com/Rajatalluri91/WOG-Images/blob/main/Songs%20Cover.jpg?raw=true", lrc:"https://raw.githubusercontent.com/Rajatalluri91/World-of-God-Songs/refs/heads/main/Lyrics/Thudivaraku.lrc" },
+        {
+      name:"పండుగ చేద్దామా",
+      file:"https://raw.githubusercontent.com/Rajatalluri91/World-of-God-Songs/main/Panduga.mp3",
+      duration:"06:00",      art:"https://github.com/Rajatalluri91/WOG-Images/blob/main/Songs%20Cover.jpg?raw=true",
+      lrc: "https://gist.githubusercontent.com/Rajatalluri91/69526796a0a48e6ab3c3fa74ff9ff5ae/raw/535674db84a6809da89b8b3c3ade05a1e5772588/3.%2520Panduga%2520Cheddama "
+    },
+    {
+      name:"నీకై నూతనమవుతున్నది ",
+      file:"https://raw.githubusercontent.com/Rajatalluri91/World-of-God-Songs/main/New%20Year%20Song.mp3",
+      duration:"05:09",
+      art:"https://github.com/Rajatalluri91/WOG-Images/blob/main/Songs%20Cover.jpg?raw=true",
+      lrc: "https://gist.githubusercontent.com/Rajatalluri91/69526796a0a48e6ab3c3fa74ff9ff5ae/raw/535674db84a6809da89b8b3c3ade05a1e5772588/4.%2520Neekai%2520Nuthana "
+    },
+	{
+      name:"ఆకాశంతో చెప్పనా",
+      file:"https://raw.githubusercontent.com/Rajatalluri91/World-of-God-Songs/main/Akashamtho.mp3",
+      duration:"04:11",
+     art:"https://github.com/Rajatalluri91/WOG-Images/blob/main/Songs%20Cover.jpg?raw=true", 
+      lrc: "https://gist.githubusercontent.com/Rajatalluri91/69526796a0a48e6ab3c3fa74ff9ff5ae/raw/535674db84a6809da89b8b3c3ade05a1e5772588/5.%2520Akashamtho "
+    },
+    {
+      name:"తెలుసా ఇది తెలుసా",
+      file:"https://raw.githubusercontent.com/Rajatalluri91/World-of-God-Songs/main/Telusa.mp3",
+      duration:"04:21",
+      art:"https://github.com/Rajatalluri91/WOG-Images/blob/main/Songs%20Cover.jpg?raw=true",
+      lrc: "https://gist.githubusercontent.com/Rajatalluri91/69526796a0a48e6ab3c3fa74ff9ff5ae/raw/535674db84a6809da89b8b3c3ade05a1e5772588/6.%2520Telusa%2520Idhi%2520Telusa "
+    },
+    {
+      name:"పండుగ చేద్దామా Track",
+      file:"https://raw.githubusercontent.com/Rajatalluri91/World-of-God-Songs/main/Raja%27s%20Christmas%20Song%20%20Track.mp3",
+      duration:"06:00",
+      art:"https://github.com/Rajatalluri91/WOG-Images/blob/main/Songs%20Cover.jpg?raw=true",
+      lrc: "https://gist.githubusercontent.com/Rajatalluri91/69526796a0a48e6ab3c3fa74ff9ff5ae/raw/535674db84a6809da89b8b3c3ade05a1e5772588/3.%2520Panduga%2520Cheddama "
+    },
+    {
+      name:"New Year Song Track ",
+      file:"https://raw.githubusercontent.com/Rajatalluri91/World-of-God-Songs/main/New%20Year%20Track.mp3",
+      duration:"05:09",
+     art:"https://github.com/Rajatalluri91/WOG-Images/blob/main/Songs%20Cover.jpg?raw=true", 
+      lrc: "https://gist.githubusercontent.com/Rajatalluri91/69526796a0a48e6ab3c3fa74ff9ff5ae/raw/535674db84a6809da89b8b3c3ade05a1e5772588/4.%2520Neekai%2520Nuthana "
+    },
+    {
+      name:"New Year Song Special ",
+      file:"https://raw.githubusercontent.com/Rajatalluri91/World-of-God-Songs/main/New%20Year%20Song%20Remix.mp3",
+      duration:"06:47",
+      art:"https://github.com/Rajatalluri91/WOG-Images/blob/main/Songs%20Cover.jpg?raw=true",
+      lrc: "https://gist.githubusercontent.com/Rajatalluri91/69526796a0a48e6ab3c3fa74ff9ff5ae/raw/535674db84a6809da89b8b3c3ade05a1e5772588/4.%2520Neekai%2520Nuthana "
     }
+             
+        
+        
+    ],
+    newyear: [
+        { name:"మన తండ్రి దేవుడే", file:"https://raw.githubusercontent.com/Rajatalluri91/World-of-God-Songs/main/Mana%20Thandri%20Devude.mp3", duration:"01:42", art:"https://raw.githubusercontent.com/Rajatalluri91/WOG-Images/refs/heads/main/Children%20Songs.jpg" },
+        { name:"ఓ అన్న.. ఓ అక్క...", file:"https://raw.githubusercontent.com/Rajatalluri91/World-of-God-Songs/main/O%20Anna%20O%20Akka.mp3", duration:"01:49", art:"https://raw.githubusercontent.com/Rajatalluri91/WOG-Images/refs/heads/main/Children%20Songs.jpg" }
+    ],
+    sermons: [
+        { name:"మెల్కీసెదెకు ఎవరు?", file:"https://raw.githubusercontent.com/Rajatalluri91/WOG-PODCAST-/main/Melchisedec.mp3", duration:"33:00", art:"https://raw.githubusercontent.com/Rajatalluri91/WOG-Images/refs/heads/main/Podcast%202.jpg" }
+    ]
+};
 
+let activePlaylist = audioData.devotional;
+let activeIndex = 0;
+let currentPlaylistKey = 'devotional'; // ప్రస్తుతం UI లో ఉన్న ప్లేలిస్ట్ కీ
+let parsedLyrics = [];
+const audio = document.getElementById("myAudio");
 
-
-  function openAlbum(url) {
-  const el = event.currentTarget;
-  el.classList.add('clicked');
-  setTimeout(() => {
-    el.classList.remove('clicked');
-    window.location.href = url; // ✅ same tab లో open అవుతుంది → back button perfectly పనిచేస్తుంది
-  }, 150);
+function showSection(id, el) {
+    document.querySelectorAll('.main-content').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    if(el) el.classList.add('active');
+    
+    if(id === 'home-sec') loadPlaylist('devotional');
+    if(id === 'messages-sec') loadPlaylist('sermons');
 }
 
-  </script>
-  <script>
-  let lastScrollY = window.scrollY;
-  const header = document.querySelector(".app-header");
+function loadPlaylist(key) {
+    currentPlaylistKey = key; // UI లో ఏ ప్లేలిస్ట్ ఉందో గుర్తుంచుకుంటుంది
+    const listData = audioData[key];
+    const activeSection = document.querySelector('.main-content.active');
+    const listCtn = activeSection.querySelector('.playlist-ctn');
+    if(!listCtn) return;
 
-  window.addEventListener("scroll", () => {
-    const currentScrollY = window.scrollY;
+    listCtn.innerHTML = `<h3 style="color:var(--accent); font-size:14px; margin:20px 5px;">List</h3>`;
+    listData.forEach((track, i) => {
+        // హైలైట్ లాజిక్: డేటా మరియు ఇండెక్స్ రెండూ మ్యాచ్ కావాలి
+        const isThisPlaying = (activePlaylist === listData && activeIndex === i);
+        const div = document.createElement('div');
+        div.className = `track-item ${isThisPlaying ? 'active-song' : ''}`;
+        div.innerHTML = `<i class="fas fa-play-circle" style="color:var(--accent); font-size:20px; margin-right:15px;"></i>
+                         <div><div>${track.name}</div><div style="font-size:11px; opacity:0.6">${track.duration}</div></div>`;
+        div.onclick = (e) => { 
+            e.stopPropagation(); 
+            handleTrackClick(listData, i); 
+        };
+        listCtn.appendChild(div);
+    });
+}
 
-    if (currentScrollY > lastScrollY && currentScrollY > 60) {
-      // 🔽 scrolling down → hide header
-      header.classList.add("hide");
+function handleTrackClick(playlist, i) {
+    if(activePlaylist === playlist && activeIndex === i && audio.src !== "") {
+        toggleAudio();
     } else {
-      // 🔼 scrolling up → show header
-      header.classList.remove("hide");
+        playTrack(playlist, i);
     }
+}
 
-    lastScrollY = currentScrollY;
-  });
+function playTrack(playlist, i) {
+    if(playlist[i].file === "#") { alert("Audio not available"); return; }
+    activePlaylist = playlist;
+    activeIndex = i;
+    const track = activePlaylist[activeIndex];
+    audio.src = track.file;
+    document.getElementById('mini-title').innerText = track.name;
+    document.getElementById('exp-title').innerText = track.name;
+    document.getElementById('miniArt').style.backgroundImage = `url(${track.art})`;
+    document.getElementById('exp-art').style.backgroundImage = `url(${track.art})`;
+    document.getElementById('totalTime').innerText = track.duration;
+    
+    parsedLyrics = [];
+    document.getElementById('lyricsText').innerHTML = "";
+    if(track.lrc) fetch(track.lrc).then(r => r.text()).then(t => { parsedLyrics = parseLRC(t); renderLyrics(); });
+
+    updateHighlightUI();
+    audio.play();
+    updateIcons(true);
+}
+
+function toggleAudio(e) {
+    if(e) e.stopPropagation();
+    if(!audio.src || audio.src === window.location.href) { playTrack(activePlaylist, 0); return; }
+    audio.paused ? (audio.play(), updateIcons(true)) : (audio.pause(), updateIcons(false));
+}
+
+function updateIcons(playing) {
+    document.getElementById('m-play').style.display = playing ? 'none' : 'block';
+    document.getElementById('m-pause').style.display = playing ? 'block' : 'none';
+    document.getElementById('e-play').style.display = playing ? 'none' : 'block';
+    document.getElementById('e-pause').style.display = playing ? 'block' : 'none';
+}
+
+function updateHighlightUI() {
+    // ప్రస్తుతం UI లో ఏ సెక్షన్ ఉందో దాని ప్లేలిస్ట్‌ని రీలోడ్ చేస్తుంది
+    loadPlaylist(currentPlaylistKey);
+}
+
+function parseLRC(lrc) {
+    const lines = lrc.split('\n'), result = [], reg = /\[(\d{2}):(\d{2})\.(\d{2,3})\]/;
+    lines.forEach(line => {
+        const m = reg.exec(line);
+        if(m) {
+            const time = parseInt(m[1])*60 + parseInt(m[2]) + parseInt(m[3])/100;
+            const text = line.replace(reg, '').trim();
+            if(text) result.push({time, text});
+        }
+    });
+    return result;
+}
+
+function renderLyrics() {
+    document.getElementById('lyricsText').innerHTML = parsedLyrics.map((l, i) => `<p class="lyric-line" id="l-${i}">${l.text}</p>`).join('');
+}
+
+function toggleLyrics(e) { e.stopPropagation(); document.getElementById('artBox').classList.toggle('show-lyrics'); }
+function handleMiniPlayerClick(e) { if(!document.getElementById('mainPlayer').classList.contains('expanded')) toggleAudio(e); }
+function toggleExpand(e) { if(e) e.stopPropagation(); document.getElementById('mainPlayer').classList.add('expanded'); }
+function closePlayer(e) { if(e) e.stopPropagation(); document.getElementById('mainPlayer').classList.remove('expanded'); }
+function formatTime(s) { let m = Math.floor(s/60), sec = Math.floor(s%60); return (m<10?'0'+m:m)+':'+(sec<10?'0'+sec:sec); }
+function seek(e) { e.stopPropagation(); const rect = document.getElementById('myProgress').getBoundingClientRect(); audio.currentTime = ((e.clientX - rect.left) / rect.width) * audio.duration; }
+function changeSpeed(e) { e.stopPropagation(); const speeds = [1, 1.25, 1.5, 2, 0.5]; let nextIdx = (speeds.indexOf(audio.playbackRate) + 1) % speeds.length; audio.playbackRate = speeds[nextIdx]; document.getElementById('speedBtn').innerText = speeds[nextIdx] + 'x'; }
+function downloadSong(e) { e.stopPropagation(); if(audio.src) { const a = document.createElement('a'); a.href = audio.src; a.download = document.getElementById('exp-title').innerText + ".mp3"; a.click(); } }
+
+function next(e) { if(e) e.stopPropagation(); activeIndex = (activeIndex + 1) % activePlaylist.length; playTrack(activePlaylist, activeIndex); }
+function previous(e) { if(e) e.stopPropagation(); activeIndex = (activeIndex - 1 + activePlaylist.length) % activePlaylist.length; playTrack(activePlaylist, activeIndex); }
+
+audio.ontimeupdate = () => {
+    if(!audio.duration) return;
+    const cur = audio.currentTime;
+    document.getElementById('myBar').style.width = (cur / audio.duration) * 100 + '%';
+    document.getElementById('currTime').innerText = formatTime(cur);
+    document.getElementById('mini-timer').innerText = formatTime(cur);
+    parsedLyrics.forEach((l, i) => {
+        if(cur >= l.time) {
+            document.querySelectorAll('.lyric-line').forEach(el => el.classList.remove('active'));
+            const active = document.getElementById(`l-${i}`);
+            if(active) { active.classList.add('active'); active.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+        }
+    });
+};
+
+audio.onended = () => next();
+loadPlaylist('devotional');
 </script>
 </body>
 </html>
