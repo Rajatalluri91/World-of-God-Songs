@@ -19,12 +19,45 @@
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; user-select: none; }
         body { margin: 0; background: #000; color: var(--text-main); font-family: 'Mandali', sans-serif; height: 100vh; overflow: hidden; }
 
-        .main-content { height: calc(100vh - 135px); overflow-y: auto; padding: 20px 15px; display: none; scroll-behavior: smooth; }
-        .main-content.active { display: block; }
+        /* టైటిల్ కోసం కొత్త ఫిక్సెడ్ స్టైల్స్ */
+   .app-header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        background: #000;
+        z-index: 2500;
+        padding: 5px 15px; /* ప్యాడింగ్ కొంచెం తగ్గించాను */
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
 
-        .section-header { display: flex; justify-content: space-between; align-items: center; padding: 0 5px; margin-top: 5px; margin-bottom: 10px; }
-        .gold-text { background: linear-gradient(90deg, #d4af37, #f8e7a1, #c5a100); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: bold; font-size: 24px; margin: 0; padding-bottom: 10px; }
-
+    .header-logo {
+        height: 45px; /* లోగో సైజు ఇక్కడ అడ్జస్ట్ చేసుకోవచ్చు */
+        width: auto;
+        object-fit: contain;
+    }
+    /* బాడీ గ్యాప్ సర్దుబాటు */
+    .main-content { 
+        height: calc(100vh - 135px); 
+        overflow-y: auto; 
+        padding: 65px 15px 20px; /* టాప్ ప్యాడింగ్ హెడర్ కోసం ఇచ్చాను */
+        display: none; 
+        scroll-behavior: smooth; 
+    }
+    .main-content.active { display: block; }
+    
+    /* టైటిల్ గ్యాప్ తగ్గించడం */
+    .gold-text { 
+        background: linear-gradient(90deg, #d4af37, #f8e7a1, #c5a100); 
+        -webkit-background-clip: text; 
+        -webkit-text-fill-color: transparent; 
+        font-weight: bold; 
+        font-size: 22px; 
+        margin: 0; 
+    }
         .horizontal-scroll { display: flex; overflow-x: auto; gap: 15px; padding: 10px 5px; scrollbar-width: none; }
         .horizontal-scroll::-webkit-scrollbar { display: none; }
 
@@ -67,8 +100,13 @@
 </head>
 <body>
 
-<div id="home-sec" class="main-content active">
+<div class="app-header">
     <h2 class="gold-text">World of God</h2>
+    <img src="https://raw.githubusercontent.com/Rajatalluri91/World-of-God-Songs/refs/heads/main/icons/icon-512.png" alt="Logo" class="header-logo">
+</div>
+
+
+<div id="home-sec" class="main-content active">
     <div class="section-header"><h3>Album Songs</h3></div>
     <div class="horizontal-scroll">
         <div class="category-card" onclick="loadPlaylist('devotional')">
@@ -87,14 +125,14 @@
 
 
 <div id="bible-sec" class="main-content">
-    <h2 class="gold-text">పరిశుద్ధ గ్రంథము</h2>
-    <div class="section-header"><h3>బైబిల్ నేర్చుకుందాం</h3></div>
+   
+    <div class="section-header"><h3>Bible Study</h3></div>
     <div class="horizontal-scroll">
         <div class="category-card" onclick="window.open('https://rajatalluri91.github.io/Wog-Telugu-Bible/', '_self')">
             <img src="https://raw.githubusercontent.com/Rajatalluri91/WOG-Images/refs/heads/main/Telugu%20Bible.jpg">
             <span>Telugu Bible</span>
         </div>
-        <div class="category-card" onclick="window.location.href='https://rajatalluri91.github.io/Wog-Telugu-Bible/'">
+        <div class="category-card" onclick="window.location.href='https://rajatalluri91.github.io/World-of-God-Songs/Available%20Soon.html'">
             <img src="https://raw.githubusercontent.com/Rajatalluri91/WOG-Images/refs/heads/main/The%20Bible.jpg">
             <span>Bible Books Overview</span>
         </div>
@@ -102,23 +140,23 @@
 </div>
 
 <div id="video-sec" class="main-content">
-    <h2 class="gold-text">వీడియోలు</h2>
-    <div class="section-header"><h3>Video Songs</h3></div>
+   
+    <div class="section-header"><h3>Videos Section</h3></div>
     <div class="horizontal-scroll">
-        <div class="category-card" onclick="window.location.href='https://rajatalluri91.github.io/World-of-God-/'">
-            <img src="https://via.placeholder.com/300/000/red?text=YouTube">
+        <div class="category-card" onclick="window.location.href='https://rajatalluri91.github.io/WOG-Youtube/'">
+            <img src="https://raw.githubusercontent.com/Rajatalluri91/WOG-Images/refs/heads/main/Video%20Songs.jpg">
             <span>Video Songs</span>
         </div>
-        <div class="category-card" onclick="#">
-            <img src="https://via.placeholder.com/300/000/red?text=YouTube">
-            <span>Short Videos</span>
-        </div>
+        <div class="category-card"
+     onclick="window.location.href='https://rajatalluri91.github.io/World-of-God-Songs/Available%20Soon.html'">
+    <img src="https://raw.githubusercontent.com/Rajatalluri91/WOG-Images/refs/heads/main/Short%20Videos.png">
+    <span>Short Videos</span>    
+</div>
     </div>
 </div>
 
 <div id="messages-sec" class="main-content">
-    <h2 class="gold-text">Audio Messages</h2>
-    <div class="section-header"><h3>Podcast</h3></div>
+    <div class="section-header"><h3>Audio Messages</h3></div>
     <div class="horizontal-scroll">
         <div class="category-card" onclick="loadPlaylist('sermons')">
             <img src="https://raw.githubusercontent.com/Rajatalluri91/WOG-Images/refs/heads/main/Podcast%202.jpg">
@@ -128,8 +166,22 @@
     <div class="playlist-ctn"></div>
 </div>
 
-<div id="video-sec" class="main-content"><h2 class="gold-text">వీడియోలు</h2></div>
-<div id="docs-sec" class="main-content"><h2 class="gold-text">Documents</h2></div>
+<div id="docs-sec" class="main-content">
+    
+    <div class="section-header"><h3>Library</h3></div>
+    <div class="horizontal-scroll">
+        <div class="category-card" onclick="loadDocList('bibleDocs')">
+            <img src="https://raw.githubusercontent.com/Rajatalluri91/WOG-Images/refs/heads/main/Bible%20Lessons.jpg">
+            <span>Bible Lessons</span>
+        </div>
+        <div class="category-card" onclick="loadDocList('articles')">
+            <img src="https://raw.githubusercontent.com/Rajatalluri91/WOG-Images/refs/heads/main/Bible%20Articles.jpg">
+            <span>Articles</span>
+        </div>
+    </div>
+    <div class="playlist-ctn" id="docs-list-ctn"></div>
+</div>
+
 
 <div class="player-ctn" id="mainPlayer" onclick="handleMiniPlayerClick(event)">
     <div class="mini-player-content">
@@ -383,6 +435,104 @@ audio.ontimeupdate = () => {
 
 audio.onended = () => next();
 loadPlaylist('devotional');
+
+// --- Updated Back Press Logic (Working) ---
+
+// 1. హిస్టరీ మేనేజ్మెంట్ కోసం చిన్న వేరియబుల్స్
+let isPlaylistOpen = false;
+
+// 2. లోడ్ ప్లేలిస్ట్ ఫంక్షన్‌ను అప్‌డేట్ చేస్తున్నాం (కార్డ్ క్లిక్ చేసినప్పుడు)
+const originalLoadPlaylist = loadPlaylist;
+loadPlaylist = function(key) {
+    originalLoadPlaylist(key);
+    isPlaylistOpen = true; // ప్లేలిస్ట్ ఓపెన్ అయిందని గుర్తుంచుకుంటుంది
+    window.history.pushState({view: 'playlist'}, ""); // హిస్టరీలో ఒక స్టేట్ యాడ్ చేస్తుంది
+};
+
+// 3. సెక్షన్ మారినప్పుడు ప్లేలిస్ట్ స్టేట్ క్లియర్ చేయడం
+const originalShowSection = showSection;
+showSection = function(id, el) {
+    originalShowSection(id, el);
+    isPlaylistOpen = false;
+    if(id !== 'home-sec') {
+        window.history.pushState({view: 'section'}, "");
+    }
+};
+
+// 4. బ్యాక్ బటన్ మెయిన్ లాజిక్
+window.onpopstate = function(event) {
+    const player = document.getElementById('mainPlayer');
+    const activeSection = document.querySelector('.main-content.active');
+    const playlistCtn = activeSection.querySelector('.playlist-ctn');
+
+    // A. ప్లేయర్ పెద్దదిగా ఉంటే క్లోజ్ చేయాలి
+    if (player.classList.contains('expanded')) {
+        player.classList.remove('expanded');
+        window.history.pushState(null, ""); 
+        return;
+    }
+
+    // B. ప్లేలిస్ట్ (Card లిస్ట్) ఓపెన్ అయి ఉంటే దాన్ని క్లోజ్ చేయాలి
+    if (isPlaylistOpen) {
+        if (playlistCtn) playlistCtn.innerHTML = "";
+        isPlaylistOpen = false;
+        return; // ఇక్కడే ఆగిపోతుంది, హోమ్ కి వెళ్ళదు
+    }
+
+    // C. హోమ్ కాకుండా వేరే సెక్షన్ లో ఉంటే హోమ్ కి వెళ్ళాలి
+    if (activeSection.id !== 'home-sec') {
+        const homeNavItem = document.querySelector('.nav-item');
+        showSection('home-sec', homeNavItem);
+    } else {
+        // హోమ్ లో ఉండి బ్యాక్ నొక్కితే బ్రౌజర్ బ్యాక్ లేదా ఎగ్జిట్
+        history.back();
+    }
+};
+
+// ఇనిషియల్ స్టేట్
+window.history.replaceState({view: 'home'}, "");
+
+
+
+// డాక్యుమెంట్ డేటా
+const docData = {
+    bibleDocs: [
+        { name: "Bible Study Guide", url: "https://rajatalluri91.github.io/WOG-Documents/" },
+        { name: "Old Testament Overview", url: "https://rajatalluri91.github.io/WOG-Documents/OT" }
+    ],
+    articles: [
+        { name: "Creation vs Evolution", url: "https://rajatalluri91.github.io/WOG-Articles/" },
+        { name: "Christian Life", url: "https://rajatalluri91.github.io/WOG-Articles/life" }
+    ]
+};
+
+// డాక్యుమెంట్ లిస్ట్ లోడ్ చేసే ఫంక్షన్
+function loadDocList(key) {
+    const listData = docData[key];
+    const listCtn = document.getElementById('docs-list-ctn');
+    if(!listCtn) return;
+
+    listCtn.innerHTML = `<h3 style="color:var(--accent); font-size:14px; margin:20px 5px;">Documents List</h3>`;
+    
+    listData.forEach((doc) => {
+        const div = document.createElement('div');
+        div.className = 'track-item'; // సాంగ్స్ లాగే స్టైల్ ఉండటానికి
+        div.innerHTML = `
+            <i class="fas fa-file-pdf" style="color:var(--accent); font-size:20px; margin-right:15px;"></i>
+            <div><div>${doc.name}</div><div style="font-size:11px; opacity:0.6">Read Online</div></div>`;
+        
+        div.onclick = (e) => { 
+            e.stopPropagation(); 
+            window.location.href = doc.url; // ఐటమ్ క్లిక్ చేస్తే లింక్ ఓపెన్ అవుతుంది
+        };
+        listCtn.appendChild(div);
+    });
+    
+    // బ్యాక్ ప్రెస్ కోసం స్టేట్ అప్‌డేట్ (పాత లాజిక్ ప్రకారం)
+    if(typeof isPlaylistOpen !== 'undefined') isPlaylistOpen = true;
+    window.history.pushState({view: 'doclist'}, "");
+}
+
 </script>
 </body>
 </html>
