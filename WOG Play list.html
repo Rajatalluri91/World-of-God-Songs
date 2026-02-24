@@ -96,6 +96,8 @@
         .nav-item { display: flex; flex-direction: column; align-items: center; color: var(--text-dim); font-size: 11px; opacity: 0.7; cursor: pointer; }
         .nav-item.active { color: var(--accent); opacity: 1; }
         .nav-item i { font-size: 22px; margin-bottom: 4px; }
+        .playlist-ctn { padding-bottom: 20px; }
+        
     </style>
 </head>
 <body>
@@ -159,8 +161,13 @@
     <div class="section-header"><h3>Audio Messages</h3></div>
     <div class="horizontal-scroll">
         <div class="category-card" onclick="loadPlaylist('sermons')">
-            <img src="https://github.com/Rajatalluri91/WOG-Images/blob/main/Podcast.gif?raw=true">
+            <img src="https://raw.githubusercontent.com/Rajatalluri91/WOG-Images/refs/heads/main/Podcast%202.jpg">
             <span>Podcast</span>
+        </div>
+        
+        <div class="category-card" onclick="loadPlaylist('classes')">
+            <img src="https://raw.githubusercontent.com/Rajatalluri91/WOG-Images/refs/heads/main/Bible%20Lessons.jpg">
+            <span>Recorded Classes</span>
         </div>
     </div>
     <div class="playlist-ctn"></div>
@@ -300,7 +307,22 @@ const audioData = {
     ],
     sermons: [
         { name:"మెల్కీసెదెకు ఎవరు?", file:"https://raw.githubusercontent.com/Rajatalluri91/WOG-PODCAST-/main/Melchisedec.mp3", duration:"33:00", art:"https://raw.githubusercontent.com/Rajatalluri91/WOG-Images/refs/heads/main/Podcast%202.jpg" }
+    ],
+    classes: [
+        { 
+            name: "లోకాలు ఎన్ని?", 
+            file: "https://raw.githubusercontent.com/Rajatalluri91/WOG-PODCAST-/main/LOKAALU%20ENNI.mp3", 
+            duration: "29:49", 
+            art: "https://raw.githubusercontent.com/Rajatalluri91/WOG-Images/refs/heads/main/Bible%20Lessons.jpg" 
+        },
+        { 
+            name: "మానవ మేధస్సుకు అందని కోడ్", 
+            file: "https://raw.githubusercontent.com/Rajatalluri91/WOG-PODCAST-/main/2025-11-30_DNA%20CODE.mp3", 
+            duration: "34:24", 
+            art: "https://raw.githubusercontent.com/Rajatalluri91/WOG-Images/refs/heads/main/Bible%20Lessons.jpg" 
+        }
     ]
+
 };
 
 let activePlaylist = audioData.devotional;
@@ -326,7 +348,7 @@ function loadPlaylist(key) {
     const listCtn = activeSection.querySelector('.playlist-ctn');
     if(!listCtn) return;
 
-    listCtn.innerHTML = `<h3 style="color:var(--accent); font-size:14px; margin:20px 5px;">List</h3>`;
+    listCtn.innerHTML = `<h3 style="color:var(--accent); font-size:14px; margin:20px 5px;">Play List</h3>`;
     listData.forEach((track, i) => {
         // హైలైట్ లాజిక్: డేటా మరియు ఇండెక్స్ రెండూ మ్యాచ్ కావాలి
         const isThisPlaying = (activePlaylist === listData && activeIndex === i);
