@@ -18,7 +18,17 @@
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; user-select: none; }
         body { margin: 0; background: #000; color: var(--text-main); font-family: 'Mandali', sans-serif; height: 100vh; overflow: hidden; }
-
+		
+/* Sidebar & Header */
+        .app-header { position: fixed; top: 0; left: 0; width: 100%; background: #000; z-index: 2500; padding: 5px 15px; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: space-between; align-items: center; }
+        .header-logo { height: 45px; width: auto; object-fit: contain; }
+        
+        .sidebar { height: 100%; width: 0; position: fixed; z-index: 4000; top: 0; left: 0; background-color: #0a0a0a; overflow-x: hidden; transition: 0.4s; border-right: 1px solid rgba(255,255,255,0.1); display: flex; flex-direction: column; }
+        .sidebar a { padding: 15px 25px; text-decoration: none; font-size: 17px; color: var(--text-dim); display: block; transition: 0.3s; border-bottom: 1px solid rgba(255,255,255,0.03); }
+        .sidebar a i { margin-right: 15px; color: var(--accent); width: 20px; text-align: center; }
+        .sidebar-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 3500; }
+        .menu-btn { font-size: 20px; cursor: pointer; color: var(--accent); padding: 10px; }
+		
    .app-header {
         position: fixed;
         top: 0;
@@ -94,12 +104,35 @@
         .nav-item.active { color: var(--accent); opacity: 1; }
         .nav-item i { font-size: 22px; margin-bottom: 4px; }
         .playlist-ctn { padding-bottom: 20px; }
+		
+		 .q-form input, .q-form textarea { width: 100%; background: #222; border: 1px solid #444; color: white; padding: 12px; border-radius: 8px; margin-top: 8px; font-family: 'Mandali'; outline: none; }
+        .q-form label { font-size: 13px; color: var(--accent); margin-top: 10px; display: block; }
         
     </style>
 </head>
 <body>
+<div id="mySidebar" class="sidebar">
+    <div style="text-align: center; padding: 30px 10px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: 10px;">
+        <img src="https://raw.githubusercontent.com/Rajatalluri91/World-of-God-Songs/refs/heads/main/icons/icon-512.png" style="height: 80px; width: 80px; border-radius: 50%;">
+		
+        <h3 class="gold-text" style="font-size: 18px; margin-top: 10px;">World of God</h3>
+    </div>
+    <a href="javascript:void(0)" onclick="toggleSidebar()" style="position:absolute; top:10px; right:15px; border:none; color:var(--accent); font-size:22px;"><i class="fas fa-times"></i></a>
+    
+    <a href="https://worldofgod79-del.github.io/Wog-tracker/"><i class="fas fa-briefcase"></i> My God's Work</a>
+    <a href="javascript:void(0)" onclick="toggleSidebar(); shareApp()"><i class="fas fa-share-nodes"></i> Share App</a>
+    <a href="javascript:void(0)" onclick="toggleSidebar(); showSection('questions-sec')"><i class="fas fa-question-circle"></i> Doubts and Questions</a>
+    <a href="javascript:void(0)" onclick="toggleSidebar(); showSection('about-sec')"><i class="fas fa-info-circle"></i> About Us</a>
+    
+    <div style="margin-top:auto; padding:20px; text-align:center; opacity:0.4; font-size:10px;">
+        <p>&copy; 2026 World of God<br>Designed by Raja Talluri & Rajesh Karatapu</p>
+    </div>
+</div>
+<div id="sidebarOverlay" class="sidebar-overlay" onclick="toggleSidebar()"></div>
+
 
 <div class="app-header">
+    <div class="menu-btn" onclick="toggleSidebar()"><i class="fas fa-bars"></i></div>
     <h2 class="gold-text">World of God</h2>
     <img src="https://raw.githubusercontent.com/Rajatalluri91/World-of-God-Songs/refs/heads/main/icons/icon-512.png" alt="Logo" class="header-logo">
 </div>
@@ -147,6 +180,18 @@
     </div>
 </div>
 
+
+<div id="questions-sec" class="main-content">
+    <div class="section-header"><h3>Doubts and Questions</h3></div>
+    <div style="background: var(--glass); padding: 20px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.1);" class="q-form">
+        <label>మీ పేరు</label><input type="text" id="userName" placeholder="మీ పేరు..." required>
+        <label>వాట్సాప్ నంబర్</label><input type="text" id="userContact" placeholder="మీ నంబర్..." required>
+        <label>మీ ప్రశ్న</label><textarea id="userQuestion" rows="4" placeholder="మీ సందేహాన్ని ఇక్కడ రాయండి..." required></textarea>
+        <button type="button" onclick="sendToWhatsApp()" style="width:100%; background:var(--accent); color:black; border:none; padding:12px; border-radius:10px; font-weight:bold; margin-top:15px; cursor:pointer;">WhatsApp ద్వారా పంపండి</button>
+    </div>
+</div>
+
+
 <div id="messages-sec" class="main-content">
     <div class="section-header"><h3>Audio Messages</h3></div>
     <div class="horizontal-scroll">
@@ -175,6 +220,43 @@
         </div>
     </div>
     <div class="playlist-ctn" id="docs-list-ctn"></div>
+</div>
+
+<div id="about-sec" class="main-content">
+    <div class="section-header"><h3>About Us</h3></div>
+    <div style="background: var(--glass); padding: 25px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); line-height: 1.8;">
+        <div style="text-align: center; margin-bottom: 20px;">
+            <img src="https://raw.githubusercontent.com/Rajatalluri91/World-of-God-Songs/refs/heads/main/icons/icon-512.png" style="height: 100px; width: 100px; border-radius: 50%;">
+            <h2 class="gold-text">World of God</h2>
+        </div>
+        
+        <p style="color: var(--text-main); font-size: 15px; text-align:justify;">
+            దేవుని వాక్యం.. <br> 
+మన రక్షణకు, శిక్షణకు పరలోకపు తండ్రి వ్రాయించి ఇచ్చిన తన మనసులోని మాటలు..<br><br>
+సామాజిక మాధ్యమాల ద్వారా దేవుని వాక్యం అందరికీ చాలా దగ్గరైంది కానీ.. సత్యమైనది దూరముగాను, లోతుగాను ఉన్నదని.. దానిని పరిశీలిస్తేనే బోధపడుతుందని వాక్యం సెలవిచ్చింది.<br>
+వాక్యాన్ని వక్రీకరించి సత్యాన్ని అందకుండా చేయాలన్న అపవాది తంత్రాలను  కూలద్రోస్తూ.. మా వంతు ప్రయత్నంగా WORLD OF GOD యూట్యూబ్ ఛానల్, వాట్సాప్ గ్రూప్ మరియు Instagram ద్వారా దేవుని వాక్యాన్ని సరిగా విభజిస్తూ.. అందరికీ అందించాలని మా వంతు ప్రయత్నంగా దేవుని దయవలన మా చిన్న పరిచర్యను జరిగిస్తున్నాము..<br>
+<br><br>సత్య వాక్యాన్ని నేర్చుకుందాం..! అందరికీ అందచేద్దాం..!!
+        </p>
+
+        <h3 style="color: var(--accent); font-size: 18px; margin-top: 20px;"><i class="fas fa-pen-nib"></i> రూపకర్తలు</h3>
+        <ul style="color: var(--text-dim); font-size: 14px; list-style: none; padding: 0;">
+            <li style="margin-bottom: 10px;"><i class="fas fa-user-edit" style="color: var(--accent);"></i> <b>Rajesh Karatapu</b></li>
+            <li><i class="fas fa-user-edit" style="color: var(--accent);"></i> <b>Raja Talluri</b></li>
+        </ul>
+
+        <div style="margin-top: 30px; text-align: center; background: rgba(255,255,255,0.03); padding: 15px; border-radius: 15px;">
+            <p style="color: var(--accent); font-size: 14px; margin-bottom: 10px; font-weight: bold;">Connect with us</p>
+            <div style="display: flex; justify-content: center; gap: 25px;">
+                <a href="https://chat.whatsapp.com/DMAtEr4enJ5IoxA0c8Loag?mode=gi_t" target="_blank" style="color: #25D366; font-size: 30px;"><i class="fab fa-whatsapp"></i></a>
+                <a href="https://www.youtube.com/@WorldOfgod_telugu" target="_blank" style="color: #FF0000; font-size: 30px;"><i class="fab fa-youtube"></i></a>
+                <a href="https://www.instagram.com/world._of_god/?hl=en" target="_blank" style="color: #E1306C; font-size: 30px;"><i class="fab fa-instagram"></i></a>
+            </div>
+        </div>
+
+        <div style="text-align: center; color: var(--text-dim); font-size: 10px; margin-top: 30px; opacity: 0.5;">
+            <p>© 2026 World of God<br>All Rights Reserved.</p>
+        </div>
+    </div>
 </div>
 
 <div class="player-ctn" id="mainPlayer" onclick="handleMiniPlayerClick(event)">
@@ -233,6 +315,87 @@
 <audio id="myAudio"></audio>
 
 <script>
+
+// UI Control
+function toggleSidebar() {
+    const s = document.getElementById("mySidebar");
+    const o = document.getElementById("sidebarOverlay");
+    const isOpen = s.style.width === "280px";
+    s.style.width = isOpen ? "0" : "280px";
+    o.style.display = isOpen ? "none" : "block";
+}
+
+function showSection(id, el) {
+    document.querySelectorAll('.main-content').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    if(el) el.classList.add('active');
+    
+    if(id === 'home-sec') loadPlaylist('devotional');
+    if(id === 'messages-sec') loadPlaylist('sermons');
+}
+
+// WhatsApp Function
+function sendToWhatsApp() {
+    let name = document.getElementById("userName").value;
+    let contact = document.getElementById("userContact").value;
+    let question = document.getElementById("userQuestion").value;
+
+    if (!name || !contact || !question) { 
+        alert("దయచేసి అన్ని వివరాలు నింపండి."); 
+        return; 
+    }
+
+    // మీ సందేశం ఫార్మాట్
+    let message = `*కొత్త సందేహం (WOG App)*%0A` + 
+                  `---------------------------%0A` +
+                  `*పేరు:* ${name}%0A` + 
+                  `*కాంటాక్ట్:* ${contact}%0A` + 
+                  `*ప్రశ్న:* ${question}`;
+
+    // ఇక్కడ మీ వాట్సాప్ నంబర్ ఇవ్వండి (Country code 91 తో కలిపి)
+    let myNumber = "918008190113"; // ఉదాహరణకు మీ నంబర్ ఇక్కడ వేయండి
+
+    // api.whatsapp.com ఉపయోగిస్తే మెసేజ్ ఆటోమేటిక్ గా బాక్సులో కనిపిస్తుంది
+    let whatsappUrl = `https://api.whatsapp.com/send?phone=${myNumber}&text=${message}`;
+
+    window.open(whatsappUrl, '_blank');
+}
+
+
+async function shareApp() {
+    // మీరు కోరిన మెసేజ్ ఫార్మాట్
+    const shareText = `📱 World of God – Mobile App 🙏✨
+🎶 Songs that touch the soul
+📖 Bible Podcasts & Historical Documents
+📚 Read • Listen • Meditate • Grow in Faith
+🎵 Lyrics & Tune by
+✍️ Rajesh Karatapu
+✍️ Raja Talluri
+🔥 God’s Word anytime, anywhere
+🤍 Be strengthened • Be inspired • Be transformed
+🙏 Share & Spread the Gospel`;
+
+    const shareUrl = 'https://rajatalluri91.github.io/World-of-God-Songs/';
+
+    if (navigator.share) {
+        try {
+            await navigator.share({
+                title: 'World of God',
+                text: shareText,
+                url: shareUrl
+            });
+        } catch (e) {
+            console.log('Sharing failed', e);
+        }
+    } else {
+        // Web Share API లేని బ్రౌజర్ల కోసం (ఉదాహరణకు కొన్ని డెస్క్‌టాప్ బ్రౌజర్లు)
+        const fullMessage = encodeURIComponent(shareText + "\n\nLink: " + shareUrl);
+        const whatsappUrl = `https://api.whatsapp.com/send?text=${fullMessage}`;
+        window.open(whatsappUrl, '_blank');
+    }
+}
+
 const audioData = {
     devotional: [
         { name:"సృష్టిలో విలువైనది స్నేహమే", artist:"Rajesh Karatapu", file:"https://raw.githubusercontent.com/Rajatalluri91/World-of-God-Songs/main/Devuni%20Sneham.mp3", duration:"04:18", art:"https://github.com/Rajatalluri91/WOG-Images/blob/main/Songs%20Cover.jpg?raw=true", lrc:"https://raw.githubusercontent.com/Rajatalluri91/World-of-God-Songs/refs/heads/main/Lyrics/Devuni%20Sneham%20.lrc" },
